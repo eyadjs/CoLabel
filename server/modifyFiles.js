@@ -2,6 +2,8 @@ const { readdir, rm } = require('fs/promises')
 const { parse } = require('csv-parse')
 const fs = require('fs')
 const axios = require('axios')
+const { extractJSON } = require('./label')
+const { convertArrayToCSV } = require('convert-array-to-csv')
 
 async function clear() {
   const dir = './uploads'
@@ -88,5 +90,37 @@ async function writeJSON(fileName, updatedRecords) {
   }
 }
 
+async function tempJSONtoCSV(fileName) {
+  try {
+    const records = await extractJSON(fileName)
+    let headers = Object.keys(records[0])
+    let fields = []
+    fields.push(headers)
+    for (let i = 0; i < records.length; i++) {
+      fields.push(Object.values(records[i]))
+    }
 
-module.exports = { clear, fileNames, getRecords, addEmptyLabels, recordsToTempJSON, readJSON, writeJSON }
+    const newCSV = convertArrayToCSV(fields, {
+      headers,
+      separator: ','
+    }) 
+
+    if (!fs.existsSync('./results')) {
+      fs.mkdirSync('./results', { recursive: true });
+    }
+
+    const newFileName = fileName.slice(0,-5).concat('.csv')
+    fs.writeFile(`./results/${newFileName}`, newCSV, (err) => {
+      if (err) {
+        console.error('Error writing to CSV file', err);
+      } else {
+        console.log('CSV file saved successfully to /results');
+      }
+    });
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+
+module.exports = { clear, fileNames, getRecords, addEmptyLabels, recordsToTempJSON, readJSON, writeJSON, tempJSONtoCSV }

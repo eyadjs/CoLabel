@@ -2,7 +2,7 @@ const express = require('express')
 const app = express() 
 const cors = require('cors')
 const upload = require('./upload')
-const { clear, fileNames, getRecords, addEmptyLabels, recordsToTempJSON, readJSON, writeJSON } = require('./modifyFiles')
+const { clear, fileNames, getRecords, addEmptyLabels, recordsToTempJSON, readJSON, writeJSON, tempJSONtoCSV } = require('./modifyFiles')
 const { getUnlabelledEntries, extractJSON } = require('./label')
 
 const bodyParser = require('body-parser')
@@ -152,6 +152,19 @@ app.get('/getNumEntries/:rawFileName', async (req, res) => {
 })
 
 // file downloads
+
+app.get('/download/:rawFileName', (req, res) => {
+  const rawFileName = req.params.rawFileName
+  tempJSONtoCSV(rawFileName.concat('.json'))
+  const filePath = `./results/${rawFileName}.csv`
+
+  res.download(filePath, (err) => {
+    if (err) {
+      console.error(err)
+      res.status(500).send("Error downloading this file.")
+    }
+  })
+})
 
 const port = process.env.PORT || 5000
 
