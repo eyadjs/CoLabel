@@ -51,6 +51,10 @@ function Labelling() {
       }
   }
 
+  // make only the selected headers appear on the screen for labelling
+  // get them from local storage
+  // initialize them all to something from local storage in the previous page to avoid inconsistencies
+
 
 
   return (

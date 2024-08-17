@@ -66,7 +66,9 @@ const Dashboard = () => {
   }
 
   const downloadCSV = (fileName) => {
-    const rawFileName = fileName.slice() // chatgpt gave
+    const rawFileName = fileName.slice(0,-4)
+    const url = `http://localhost:5000/download/${rawFileName}`
+    window.location.href = url
   }
 
   return (
@@ -83,7 +85,7 @@ const Dashboard = () => {
             {filesInfo.map((file) => (
               <p key={file.filename}>
                 <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`}>{file.filename}</Link>
-                <button>Download File</button>
+                <button onClick={() => downloadCSV(file.filename)}>Download File</button>
               </p>
               
 

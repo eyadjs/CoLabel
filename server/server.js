@@ -4,6 +4,7 @@ const cors = require('cors')
 const upload = require('./upload')
 const { clear, fileNames, getRecords, addEmptyLabels, recordsToTempJSON, readJSON, writeJSON, tempJSONtoCSV } = require('./modifyFiles')
 const { getUnlabelledEntries, extractJSON } = require('./label')
+const csv = require('csvtojson')
 
 const bodyParser = require('body-parser')
 const axios = require('axios')
@@ -164,6 +165,19 @@ app.get('/download/:rawFileName', (req, res) => {
       res.status(500).send("Error downloading this file.")
     }
   })
+})
+
+app.get('/headers/:rawFileName', async (req, res) => {
+
+  try {
+  const rawFileName = req.params.rawFileName
+  const fileName = rawFileName.concat('.csv')
+  const csvData = await csv().fromFile(`./uploads/${fileName}`)
+  let headers = Object.keys(csvData[0])
+  res.json({headers: headers})
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 })
 
 const port = process.env.PORT || 5000

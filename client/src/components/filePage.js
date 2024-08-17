@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { getLabels } from '../utils'
@@ -126,6 +126,41 @@ export const FilePage = () => {
 	}
 
 
+	const [headers, setHeaders] = useState([]);
+    const [selectedHeaders, setSelectedHeaders] = useState([]);
+
+    useEffect(() => {
+        const fetchHeaders = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:5000/headers/${fileName.slice(0, -4)}`);
+                setHeaders(response.data.headers);
+            } catch (error) {
+                console.error("Error fetching headers:", error);
+            }
+        };
+
+        fetchHeaders();
+    }, [fileName]);
+
+    const toggleHeader = (index) => {
+        const headerToToggle = headers[index];
+        
+        setSelectedHeaders(prevSelectedHeaders => {
+            if (prevSelectedHeaders.includes(headerToToggle)) {
+				localStorage.setItem(`${fileName}-selectedHeader-${headerToToggle}`, false)
+                return prevSelectedHeaders.filter(item => item !== headerToToggle);
+            } else {
+				localStorage.setItem(`${fileName}-selectedHeader-${headerToToggle}`, true)
+                return [...prevSelectedHeaders, headerToToggle]
+				
+            }
+        })
+	}
+
+	useEffect(() => {
+        console.log(selectedHeaders);
+    }, [selectedHeaders]);
+	
 	return (
 		
 		<div>
@@ -146,10 +181,21 @@ export const FilePage = () => {
 			<button onClick={handleLFNClick}>Confirm</button>
 			<h3>{labelFieldValue}</h3>
 			
+
+			<h1>Choose the fields to label your data upon </h1>
+			<div>
+				{headers.map((item, index) => (
+					<button key={index} onClick={() => toggleHeader(index)}>{selectedHeaders.includes(item) ? <h1>{item}</h1> : <h2>{item}</h2>}</button>
+				))}
+			</div>
+
 			
 			<Link to={`/labelSetup/${fileName}`}>
 				<button onClick={confirmSelections}>Start Labeling</button>
 			</Link>
+
+
+
 
 		</div>
 		
