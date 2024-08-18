@@ -1,20 +1,23 @@
 [
-    {
-        "name": "John Doe",
-        "age": "29",
-        "city": "New York",
-        "gender": ""
-    },
-    {
-        "name": "Jane Smith",
-        "age": "34",
-        "city": "Los Angeles",
-        "gender": ""
-    },
-    {
-        "name": "Bob Johnson",
-        "age": "45",
-        "city": "Chicago",
-        "gender": ""
-    }
+  {
+    "name": "John Doe",
+    "age": "29",
+    "city": "New York",
+    "g": "m",
+    "x": "b"
+  },
+  {
+    "name": "Jane Smith",
+    "age": "34",
+    "city": "Los Angeles",
+    "g": "m",
+    "x": "a"
+  },
+  {
+    "name": "Bob Johnson",
+    "age": "45",
+    "city": "Chicago",
+    "g": "f",
+    "x": "a"
+  }
 ]

@@ -19,6 +19,7 @@ function App() {
 
   return (
     <div>
+      <h1>hi</h1>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Link to={'/dashboard'}><h1>Dashboard</h1></Link>} />

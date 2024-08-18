@@ -51,8 +51,30 @@ function Labelling() {
       }
   }
 
-  // make only the selected headers appear on the screen for labelling
-  // get them from local storage
+  const getSelectedHeaders = async () => {
+    let selectedHeaders = []
+    for (let i = 0; i < localStorage.length; i++) {
+      if (localStorage.key(i).startsWith(`${fileName}-selectedHeader`)) {
+        if (localStorage.getItem(localStorage.key(i)) == 'true') {
+          selectedHeaders.push(localStorage.key(i).split('-').at(-1))
+        }
+      }
+    }
+    return selectedHeaders
+    
+  }
+
+  const [selectedHeaders, setSelectedHeaders] = useState([]);
+
+  useEffect(() => {
+    const fetchHeaders = async () => {
+      const headers = await getSelectedHeaders()
+      setSelectedHeaders(headers);
+    };
+
+    fetchHeaders();
+  }, []);
+
   // initialize them all to something from local storage in the previous page to avoid inconsistencies
 
 
@@ -61,14 +83,22 @@ function Labelling() {
     <div>
     labelling
     {entries.length > 0 && entries[entryIndex] && (
-    <pre>{JSON.stringify(entries[entryIndex][1]["name"], null, 2)}</pre>
-    )}
+      <>
+      {selectedHeaders.map((header, index) => (
+      <pre key={index}>
+        {header}: {JSON.stringify(entries[entryIndex][1][header], null, 2)}
+      </pre>
+      ))}
+    </>
+  )}
+
+
     
     {labels.map((label, index) => (
                 <button onClick={() => nextEntry(label)} key={index}>{label}</button>
             ))}
     
-    <pre>{JSON.stringify(entries, null, 2)}</pre>
+    {/* <pre>{JSON.stringify(entries, null, 2)}</pre> */}
 
     <Link to={'/labelSetup/'.concat(fileName)}>
       <button onClick={finishLabelling}>Label some more</button>
