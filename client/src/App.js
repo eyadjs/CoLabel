@@ -19,7 +19,10 @@ function App() {
 
   return (
     <div>
-      <div className='navbar'>navbar</div>
+      <div className='navbar'>
+          <img className='logo-black' src="logo-black.png"/>
+      </div>
+      
       <div className='title-section'>
         <div className='left'>
           <div className='title'>

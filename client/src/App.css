@@ -104,7 +104,7 @@ p {
 
 .navbar {
     position: relative;
-    background-color: #27282c;
+    background-color: #111111;
     height: 100px;
     z-index: 1000;
 }
@@ -126,3 +126,9 @@ p {
 .get-started button:hover {
     background-color: #efefef
 }
+
+.logo-black {
+    height: 80px;
+}
+
+
