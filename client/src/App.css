@@ -1,10 +1,128 @@
+* {
+    background-color: black;
+    color: white;
+}
+
+p {
+    position: relative;
+    z-index: 10;
+    background-color: transparent;
+}
+
 .file-table {
     display: flex;
     flex-direction: row;
     justify-content: space-around
 }
 
-.column {
-
+.title-section {
+    
+    display: flex;
 }
 
+.title-section .left {
+    padding-top: 10%;
+    width: 50%;
+    padding-left: 15%;
+    position: absolute;
+}
+
+.title-section .right {
+    
+}
+
+.square-1 {
+    position: absolute;
+    background: linear-gradient(to right, red, blue);
+    border-radius: 200px;
+    margin-top: -15%;
+    right: -15%;
+    opacity: 0.4;
+    width: 900px;
+    height: 900px;
+    animation: rotate 120s infinite linear;
+    z-index: 1;
+    overflow: visible;
+    rotate: 225deg;
+}
+.square-2 {
+    position: absolute;
+    background: linear-gradient(to right, red, blue);
+    border-radius: 200px;
+    margin-top: -15%;
+    right: -15%;
+    opacity: 0.4;
+    width: 600px;
+    height: 600px;
+    animation: rotate 100s infinite linear;
+    z-index: 1;
+    overflow: visible;
+    rotate: 135deg;
+}
+
+.square-3 {
+    position: absolute;
+    background: linear-gradient(to right, red, blue);
+    border-radius: 200px;
+    margin-top: -15%;
+    right: -15%;
+    opacity: 0.4;
+    width: 750px;
+    height: 750px;
+    animation: rotate 150s infinite linear;
+    z-index: 1;
+    overflow: visible;
+    rotate: 45deg;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+.title {
+    font-weight: lighter;
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.subtitle {
+    font-size: 50px;
+    font-weight: 600;
+    margin-top: -3%;
+}
+
+.description {
+    font-size: 30px;
+    margin-top: -3%;
+    font-weight: 200;
+}
+
+.navbar {
+    position: relative;
+    background-color: #27282c;
+    height: 100px;
+    z-index: 1000;
+}
+
+.get-started {
+    text-align: left;
+    width: 180px;
+}
+
+.get-started button {
+    font-size: 20px;
+    background-color: white;
+    color: black;
+    border-radius: 30px;
+    padding: 12px;
+    
+}
+
+.get-started button:hover {
+    background-color: #efefef
+}
