@@ -21,23 +21,7 @@ function App() {
   return (
 
     <div>
-      <div className='navbar'>
-          <img className='logo-black' src="logo-black.png"/>
-      </div>
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
       <BrowserRouter>
         <Routes>

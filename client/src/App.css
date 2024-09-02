@@ -27,10 +27,10 @@ p {
 }
 
 .title-section .left {
-    padding-top: 10%;
-    width: 50%;
+    padding-top: 7%;
+    width: 60%;
     padding-left: 15%;
-    position: absolute;
+    position: static;
 }
 
 .title-section .right {
@@ -97,23 +97,57 @@ p {
 }
 
 .subtitle {
-    font-size: 70px;
+    font-size: 50px;
     font-weight: 600;
-    margin-top: -3%;
+    margin-top: -5%;
 }
 
 .description {
     font-size: 45px;
-    margin-top: -3%;
+    margin-top: -5%;
     font-weight: 200;
 }
 
-.navbar {
-    position: relative;
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    z-index: 100;
     background-color: #111111;
-    height: 100px;
     z-index: 1000;
 }
+
+nav {
+    background-color: #111111;
+}
+
+.navlinks {
+    list-style: none;
+    background-color: #111111;
+}
+
+.navlinks li {
+    padding: 6px; /* to prevent it from moving other elements when expanding */
+    display: inline-block;
+    margin-right: 100px;
+    background-color: #111111;
+}
+
+.navlinks li a {
+    transition: all 0.3s ease 0s;
+    background-color: #111111;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.navlinks li a:hover {
+    color: rgb(255, 155, 155);
+    font-weight: 500;
+    cursor: pointer;
+} 
 
 .get-started {
     text-align: left;
@@ -126,17 +160,62 @@ p {
     color: black;
     border-radius: 30px;
     padding: 12px;
+    transition: all 0.5s ease 0s;
+    font-weight: 500;
     
 }
 
 .get-started button:hover {
-    background-color: #efefef
+    background-color: rgb(255, 155, 155);
+    cursor: pointer;
 }
 
 .logo-black {
-    height: 70px;
-    margin-left: 10%;
-    margin-top: 10px;
+    height: 50px;
+    /* margin-left: 10%; */
+    /* margin-top: 10px; */
 }
+
+.heading {
+    font-size: 50px;
+    font-weight: 600;
+    padding-left: 15%;
+    padding-top: 10%;
+}
+
+.about-section {
+    
+}
+
+.about-blocks {
+    display: flex;
+    padding-left: 15%;
+
+    background: radial-gradient(closest-side, rgb(0, 0, 18), black)
+    
+    
+}
+
+
+
+.subheading {
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.row {
+    width: 700px;
+    background-color: transparent;
+}
+
+.block {
+    background-color: transparent;
+}
+
+.description {
+    font-size: 25px;
+    width: 80%;
+}
+
 
 
