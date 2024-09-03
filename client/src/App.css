@@ -1,10 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
+
+
 * {
-    background-color: black;
-    color: white;
+    /* background-color: black; */
+    /* color: white; */
     font-family: 'Plus Jakarta Sans', sans-serif ;
     overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 
@@ -15,11 +21,6 @@ p {
     background-color: transparent;
 }
 
-.file-table {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around
-}
 
 .title-section {
     
@@ -141,6 +142,7 @@ nav {
     background-color: #111111;
     font-size: 20px;
     font-weight: 300;
+    text-decoration: none;
 }
 
 .navlinks li a:hover {
@@ -191,12 +193,10 @@ nav {
     display: flex;
     padding-left: 15%;
 
-    background: radial-gradient(closest-side, rgb(0, 0, 18), black)
+    background: radial-gradient(closest-side, rgb(0, 0, 47), black)
     
     
 }
-
-
 
 .subheading {
     font-size: 40px;
@@ -215,6 +215,56 @@ nav {
 .description {
     font-size: 25px;
     width: 80%;
+}
+
+.file-rows {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around
+}
+
+.column p {
+    padding: 0px;
+}
+
+.file-upload {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+.file-table {
+
+    color: black;
+    background-color: rgb(250, 234, 213);
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    margin: 100px 20% 0% 20%;
+    padding-bottom: 200px;
+}
+
+.download-button {
+    background-color: transparent;
+    border-color: transparent;
+
+}
+
+.download-button:hover {
+    cursor: pointer;
+}
+
+.download-logo {
+    height: 20px
 }
 
 

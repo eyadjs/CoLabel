@@ -72,6 +72,9 @@ const Dashboard = () => {
   }
 
   return (
+
+    
+
     <div>
       <div className='App'>
         <h1>Label</h1>
@@ -80,12 +83,15 @@ const Dashboard = () => {
           <button type="submit">Submit files</button>
         </form>
         <div className='file-table'>
+        <div className='file-rows'>
           <div className='column'>
             <h2>File Name</h2>
             {filesInfo.map((file) => (
               <p key={file.filename}>
                 <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`}>{file.filename}</Link>
-                <button onClick={() => downloadCSV(file.filename)}>Download File</button>
+                <button className='download-button' onClick={() => downloadCSV(file.filename)}>
+                  <img src='download-button.png' className='download-logo'></img>
+                </button>
               </p>
               
 
@@ -97,6 +103,14 @@ const Dashboard = () => {
               <p key={file.filename}>{file.labelled}%</p>
             ))}
           </div>
+
+        </div>
+        <div className='file-upload'>
+          <form onSubmit={onSubmitHandler}>
+            <input type="file" multiple onChange={fileChangeHandler} />
+            <button type="submit">Submit files</button>
+          </form>
+        </div>
         </div>
       </div>
     </div>

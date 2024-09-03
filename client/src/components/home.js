@@ -5,12 +5,14 @@ const Home = () => {
     return (
         <div>
           <header>
-            <img className='logo-black' src="logo-black.png"/>
+            <a href='#title'>
+                <img className='logo-black' src="logo-black.png"/>
+            </a>
             <nav>
                 
                 <ul className="navlinks">
                   
-                  <li><a>About</a></li>
+                  <li><a href='#about'>About</a></li>
                   <li><a>Tutorial</a></li>
                   <li><a>Updates</a></li>
                   <li><a><button>Get Started</button></a></li>
@@ -20,7 +22,7 @@ const Home = () => {
           </header>
 
 
-      <div className='title-section'>
+      <div className='title-section' id='title'>
         <div className='left'>
           <div className='title'>
             <p></p>
@@ -43,7 +45,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className='about-section'>
+      <div className='about-section' id='about'>
         <div className='heading'>
           <p>Why CoLabel?</p>
         </div>
