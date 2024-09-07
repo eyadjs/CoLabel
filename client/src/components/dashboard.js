@@ -27,6 +27,8 @@ const Dashboard = () => {
       .catch((err) => {
         console.log(err.message);
       });
+
+    window.location.reload()
   };
   
 
@@ -77,6 +79,14 @@ const Dashboard = () => {
 
     <div>
       <div className='App'>
+        <div className='top'>
+          
+          <img className='logo-black' style={{position:"absolute", marginLeft:"0%"}} src="logo-black.png"/>
+          <p className='top-title'>Dashboard</p>
+        </div>
+                
+
+
 
 
         <div className='file-table'>
@@ -85,7 +95,7 @@ const Dashboard = () => {
             <h2>File Name</h2>
             {filesInfo.map((file) => (
               <p key={file.filename}>
-                <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`}>{file.filename}</Link>
+                <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file.filename}</Link>
                 <button className='download-button' onClick={() => downloadCSV(file.filename)}>
                   <img src='download-button.png' className='download-logo'></img>
                 </button>

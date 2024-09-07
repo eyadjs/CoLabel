@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
-
-
 * {
-    /* background-color: black; */
-    /* color: white; */
-    font-family: 'Plus Jakarta Sans', sans-serif ;
     overflow-x: hidden;
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Plus Jakarta Sans', sans-serif ;
 }
 
 html {
@@ -174,8 +175,6 @@ nav {
 
 .logo-black {
     height: 50px;
-    /* margin-left: 10%; */
-    /* margin-top: 10px; */
 }
 
 .heading {
@@ -186,16 +185,13 @@ nav {
 }
 
 .about-section {
-    
+    margin-top: 200px;
 }
 
 .about-blocks {
     display: flex;
     padding-left: 15%;
-
     background: radial-gradient(closest-side, rgb(0, 0, 47), black)
-    
-    
 }
 
 .subheading {
@@ -234,7 +230,19 @@ nav {
     margin-top: 20px;
 }
 
+.tutorial-section {
+    margin-top: 200px;
+}
 
+.tutorial-block {
+    width: 70%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.tutorial-text {
+    font-size: 25px;
+}
 
 
 
@@ -244,11 +252,12 @@ nav {
 
 .file-table {
 
-    color: black;
-    background-color: rgb(250, 234, 213);
+    color: white;
+    background-color: rgb(27, 1, 1);
     border-style: solid;
     border-radius: 10px;
     border-width: 1px;
+    border-color: white;
     margin: 100px 20% 0% 20%;
     padding-bottom: 200px;
 }
@@ -264,8 +273,38 @@ nav {
 }
 
 .download-logo {
-    height: 20px
+    height: 20px;
+    color: white;
+    background-color: wheat;
+}
+
+.filename {
+    color: white;
+    text-decoration: none;
+}
+
+.warning {
+    color: rgb(252, 102, 102);
 }
 
 
+
+
+
+
+
+
+
+
+
+
+.top {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.top-title {
+    margin-right: 10%;
+}
 

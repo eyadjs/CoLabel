@@ -13,9 +13,9 @@ const Home = () => {
                 <ul className="navlinks">
                   
                   <li><a href='#about'>About</a></li>
-                  <li><a>Tutorial</a></li>
-                  <li><a>Updates</a></li>
-                  <li><a><button>Get Started</button></a></li>
+                  <li><a href='#tutorial'>Tutorial</a></li>
+                  <li><a href='#updates'>Updates</a></li>
+                  <li><a><button style={{all: 'unset'}}>Get Started</button></a></li>
                 </ul>
             </nav>
             
@@ -52,7 +52,7 @@ const Home = () => {
         <div className='about-blocks'>
           <div className='row row-1'>
             <div className='block block-1'>
-              <p className='subheading'>A seamless experience</p>
+              <p className='subheading'>A Seamless Experience</p>
               <p className='description'>
                 CoLabel offers an intuitive interface for labelling your datasets. Gone are the days of writing code to set up such environments!
               </p>
@@ -80,6 +80,18 @@ const Home = () => {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className='tutorial-section' id='tutorial'>
+        <p className='heading'>Tutorial</p>
+        <div className='tutorial-block'>
+          <p className='tutorial-text'>After setting up your account, proceed to your dashboard where you will see your currently uploaded files.</p>
+          <p className='tutorial-text'>Here, you can add, delete, access, and manage your projects.</p>
+          <p className='warning'>Ensure you are uploaded a .csv file as your unlabelled dataset!</p>
+          <p className='warning'>Ensure your file is comma-seperated, NOT semicolon seperated!</p>
+          <p className='warning'>Ensure your file does NOT yet contain the field you would like to add labelled data for, CoLabel will handle this for you!</p>
+          <p className='tutorial-text'>Once you have opened a project for the first time, you will be prompted to set certain parameters.</p>
         </div>
       </div>
         </div>
