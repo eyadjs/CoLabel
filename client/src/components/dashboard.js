@@ -81,46 +81,47 @@ const Dashboard = () => {
       <div className='App'>
         <div className='top'>
           
-          <img className='logo-black' style={{position:"absolute", marginLeft:"0%"}} src="logo-black.png"/>
+
           <p className='top-title'>Dashboard</p>
         </div>
                 
 
 
+        <div className='dashboard'>
+          <p style={{left:"20%", bottomMargin:"5%", fontSize:"30px", fontWeight:"200"}}>Manage your projects</p>
+          <div className='file-table'>
+          <div className='file-rows'>
+            <div className='column'>
+              <h2 style={{fontSize:"25px", fontWeight:"200"}}>File Name</h2>
+              {filesInfo.map((file) => (
+                <p key={file.filename}>
+                  <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file.filename}</Link>
+                  <button className='download-button' onClick={() => downloadCSV(file.filename)}>
+                    <img src='download-button.png' className='download-logo'></img>
+                  </button>
+                </p>
+                
 
+              ))}
+            </div>
+            <div className='column'>
+              <h2 style={{fontSize:"25px", fontWeight:"200"}}>Label Completion</h2>
+              {filesInfo.map((file) => (
+                <p key={file.filename}>{file.labelled}%</p>
+              ))}
+            </div>
 
-        <div className='file-table'>
-        <div className='file-rows'>
-          <div className='column'>
-            <h2>File Name</h2>
-            {filesInfo.map((file) => (
-              <p key={file.filename}>
-                <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file.filename}</Link>
-                <button className='download-button' onClick={() => downloadCSV(file.filename)}>
-                  <img src='download-button.png' className='download-logo'></img>
-                </button>
-              </p>
+          </div>
+          <div className='file-upload'>
+            <form onSubmit={onSubmitHandler}>
+              <input type="file" multiple onChange={fileChangeHandler}>
               
-
-            ))}
+              </input>
+              <button type="submit">Submit files</button>
+            </form>
           </div>
-          <div className='column'>
-            <h2>Label Completion</h2>
-            {filesInfo.map((file) => (
-              <p key={file.filename}>{file.labelled}%</p>
-            ))}
           </div>
-
-        </div>
-        <div className='file-upload'>
-          <form onSubmit={onSubmitHandler}>
-            <input type="file" multiple onChange={fileChangeHandler}>
-            
-            </input>
-            <button type="submit">Submit files</button>
-          </form>
-        </div>
-        </div>
+      </div>
       </div>
     </div>
   );

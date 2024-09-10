@@ -110,6 +110,8 @@ p {
     font-weight: 200;
 }
 
+
+
 header {
     position: fixed;
     top: 0;
@@ -144,6 +146,11 @@ nav {
     font-size: 20px;
     font-weight: 300;
     text-decoration: none;
+    color: lightblue
+}
+
+.navlinks li a button {
+    color: white;
 }
 
 .navlinks li a:hover {
@@ -169,7 +176,8 @@ nav {
 }
 
 .get-started button:hover {
-    background-color: rgb(255, 155, 155);
+    background-color: rgb(204, 78, 78);
+    color: white;
     cursor: pointer;
 }
 
@@ -253,13 +261,17 @@ nav {
 .file-table {
 
     color: white;
-    background-color: rgb(27, 1, 1);
+    background-color: rgba(1, 4, 104, 0.188);
     border-style: solid;
     border-radius: 10px;
     border-width: 1px;
     border-color: white;
-    margin: 100px 20% 0% 20%;
+    margin: 0px 20% 0% 20%;
     padding-bottom: 200px;
+    margin-bottom: 50px;
+    box-shadow: rgba(72, 135, 202, 0.5) 0px 0px 20px 0px;
+
+
 }
 
 .download-button {
@@ -305,6 +317,6 @@ nav {
 }
 
 .top-title {
-    margin-right: 10%;
+    font-size: 30px;
 }
 
