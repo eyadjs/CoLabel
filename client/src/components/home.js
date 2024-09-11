@@ -41,7 +41,6 @@ const Home = () => {
           <div className='square-1'></div>
           <div className='square-2'></div>
           <div className='square-3'></div>
-          <div className='square-4'></div>
         </div>
       </div>
 
@@ -88,7 +87,52 @@ const Home = () => {
         <div className='tutorial-block'>
           <p className='tutorial-text'>After setting up your account, proceed to your dashboard where you will see your currently uploaded files.</p>
           <p className='tutorial-text'>Here, you can add, delete, access, and manage your projects.</p>
-          <p className='warning'>Ensure you are uploaded a .csv file as your unlabelled dataset!</p>
+          <div className='dashboard'>
+          <p style={{left:"20%", bottomMargin:"5%", fontSize:"30px", fontWeight:"200"}}>Manage your projects</p>
+          <div className='file-table'>
+          <div className='file-rows'>
+            <div className='column'>
+              <h2 style={{fontSize:"25px", fontWeight:"200"}}>File Name</h2>
+                <p>
+                  fruits-dataset.csv
+                  <button className='download-button'>
+                    <img src='download-button.png' className='download-logo'></img>
+                  </button>
+                </p>
+                <p>
+                  students.csv
+                  <button className='download-button'>
+                    <img src='download-button.png' className='download-logo'></img>
+                  </button>
+                </p>
+                <p>
+                  cars.csv
+                  <button className='download-button'>
+                    <img src='download-button.png' className='download-logo'></img>
+                  </button>
+                </p>
+                
+
+            </div>
+            <div className='column'>
+              <h2 style={{fontSize:"25px", fontWeight:"200"}}>Label Completion</h2>
+                <p>20%</p>
+                <p>54%</p>
+                <p>100%</p>
+            </div>
+
+          </div>
+          {/* <div className='file-upload'>
+            <form onSubmit={onSubmitHandler}>
+              <label className='choose-files'>
+                <input type="file" multiple onChange={fileChangeHandler}></input>
+              </label>
+              <button type="submit" className='submit'>Submit</button>
+            </form>
+          </div> */}
+          </div>
+      </div>
+          <p className='warning'>Ensure you have uploaded a .csv file as your unlabelled dataset!</p>
           <p className='warning'>Ensure your file is comma-seperated, NOT semicolon seperated!</p>
           <p className='warning'>Ensure your file does NOT yet contain the field you would like to add labelled data for, CoLabel will handle this for you!</p>
           <p className='tutorial-text'>Once you have opened a project for the first time, you will be prompted to set certain parameters.</p>

@@ -76,9 +76,7 @@ const Dashboard = () => {
   return (
 
     
-
-    <div>
-      <div className='App'>
+      <div className='dashboard-page'>
         <div className='top'>
           
 
@@ -114,16 +112,23 @@ const Dashboard = () => {
           </div>
           <div className='file-upload'>
             <form onSubmit={onSubmitHandler}>
-              <input type="file" multiple onChange={fileChangeHandler}>
-              
-              </input>
-              <button type="submit">Submit files</button>
+              <label className='choose-files'>
+                <input type="file" multiple onChange={fileChangeHandler}></input>
+              </label>
+              <button type="submit" className='submit'>Submit</button>
             </form>
           </div>
           </div>
       </div>
+
+        <div className='dashboard-squares'>
+          <div className='square-4'></div>
+          <div className='square-5'></div>
+          <div className='square-6'></div>
+          <div className='square-7'></div>
+        </div>
+
       </div>
-    </div>
   );
 };
 

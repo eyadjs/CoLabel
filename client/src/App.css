@@ -264,30 +264,36 @@ nav {
     background-color: rgba(1, 4, 104, 0.188);
     border-style: solid;
     border-radius: 10px;
-    border-width: 1px;
-    border-color: white;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.438);
     margin: 0px 20% 0% 20%;
     padding-bottom: 200px;
     margin-bottom: 50px;
     box-shadow: rgba(72, 135, 202, 0.5) 0px 0px 20px 0px;
+    z-index: 100;
 
 
 }
 
 .download-button {
-    background-color: transparent;
+    background-color: rgb(198, 179, 245);
     border-color: transparent;
+    border-radius: 100px;
+    margin-left: 10px;
+    transition: all 0.3s ease 0s;
 
 }
 
 .download-button:hover {
     cursor: pointer;
+    background-color: rgb(143, 121, 200);
 }
 
 .download-logo {
     height: 20px;
     color: white;
-    background-color: wheat;
+
+    border-radius: 7px;
 }
 
 .filename {
@@ -319,4 +325,87 @@ nav {
 .top-title {
     font-size: 30px;
 }
+
+
+.dashboard-squares {
+    overflow-y: hidden;
+    z-index: 1;
+}
+
+
+.square-4 {
+    position: absolute;
+    background: linear-gradient(to right, rgba(1, 56, 80, 0.556), rgb(198, 179, 245));
+    border-radius: 200px;
+    margin-top: -15%;
+    right: -15%;
+    opacity: 0.4;
+    width: 900px;
+    height: 900px;
+    animation: rotate 120s infinite linear;
+    z-index: 1;
+    overflow: visible;
+    rotate: 225deg;
+}
+.square-5 {
+    position: absolute;
+    background: linear-gradient(to right, rgba(1, 56, 80, 0.757), rgb(198, 179, 245));
+    border-radius: 200px;
+    margin-top: 0;
+    right: -15%;
+    opacity: 0.4;
+    width: 600px;
+    height: 600px;
+    animation: rotate 100s infinite linear;
+    z-index: 1;
+    overflow: visible;
+    rotate: 135deg;
+}
+
+.square-6 {
+    position: absolute;
+    background: linear-gradient(to right, rgba(1, 56, 80, 0.556), rgb(198, 179, 245));
+    border-radius: 200px;
+    margin-top: -10%;
+    right: -15%;
+    opacity: 0.4;
+    width: 750px;
+    height: 750px;
+    animation: rotate 150s infinite linear;
+    z-index: 1;
+    overflow: visible;
+    rotate: 45deg;
+    
+}
+
+.dashboard-page {
+    position: relative;
+    overflow-y: hidden;
+    height: 100vh;
+
+}
+
+.submit {
+    background-color: rgb(198, 179, 245);
+    transition: all 0.3s ease 0s;
+    height: 40px;
+    width: 100px;
+    border-radius: 100px;
+    color: black;
+    font-family: 'Plus Jakarta Sans', sans-serif ;
+    
+    
+}
+
+.submit:hover {
+    cursor: pointer;
+    background-color:   rgb(134, 107, 200);
+    
+}
+
+.choose-files {
+
+  }
+
+
 
