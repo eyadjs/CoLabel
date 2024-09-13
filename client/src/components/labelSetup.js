@@ -95,41 +95,48 @@ function LabelSetup() {
   }, [chunkSizeState]);
 
   return (
-    <div>
-        
-        <div>
-          <input ref={chunkSize}></input>
-          <button onClick={confirmLabelChunk}>Submit</button>
-        </div>
+    <div className='chunkPage'>
+        <div className='selectChunkSize'>
 
         <div>
-          { (numUnlabelledEntriesState === 0) ? 
-              (<h1>All labelled!</h1>) : (
-          chunkValidity ?
-            (<Link to={`/labelling/${fileName}`}>
-              <button>labelll</button>
-            </Link>) : (
-            <h1>Enter a valid chunk size</h1>
-            ))
-            
-          }
-        </div>
+            { (numUnlabelledEntriesState === 0) ? 
+                (<h1 style={{fontWeight:"100", fontSize:"30px"}}>All labelled!</h1>) : (
+            chunkValidity ?
+              (<Link to={`/labelling/${fileName}`}>
+                <button>labelll</button>
+              </Link>) : (
+              <h1 style={{fontWeight:"100", fontSize:"30px"}}>Enter a valid chunk size</h1>
+              ))
+              
+            }
+          </div>
 
-        <div>
-          <Link to={'/dashboard'}>
-              <button onClick={resetParameters}>Restart</button> {/* add an are you sure */}
-          </Link>
-        </div>
 
-        <div>
-          <Link to={'/dashboard'}>
-              <button>Back to Dashboard</button>
-          </Link>
-        </div> 
-        
-        
-        {/* inv others, assign chunks*/}
-        
+          <div>
+            <input ref={chunkSize}></input>
+            <button onClick={confirmLabelChunk} className='submit'>Submit</button>
+          </div>
+
+
+          
+          <div className='buttons'>
+            <div>
+              <Link to={'/dashboard'}>
+                  <button onClick={resetParameters} className='submit'>Restart</button> {/* add an are you sure */}
+              </Link>
+            </div>
+
+            <div>
+              <Link to={'/dashboard'}>
+                  <button className='submit'>Back to Dashboard</button>
+              </Link>
+            </div> 
+          </div>
+          
+          
+          {/* inv others, assign chunks*/}
+          
+      </div>
     </div>
   )
 }

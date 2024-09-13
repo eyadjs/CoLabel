@@ -110,6 +110,12 @@ p {
     font-weight: 200;
 }
 
+.normal {
+    font-size: 30px;
+    font-weight: 200;
+}
+
+
 
 
 header {
@@ -406,6 +412,38 @@ nav {
 .choose-files {
 
   }
+
+
+.selectChunkSize {
+    height: 300px;
+    border-width: 5px;
+    border-color: aliceblue;
+}
+
+.chunkPage {
+    display: flex;
+    justify-content: center;
+    margin-top:10%;
+
+    
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+input {
+    border-radius: 10px;
+    height: 30px;
+    width: 200px;
+    font-size: 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif ;
+    padding-left: 10px;
+}
+
+
 
 
 

@@ -165,34 +165,41 @@ export const FilePage = () => {
 		
 		<div>
 			<Link to={'/dashboard'}>Back to dashboard</Link>
-			<p>{fileName}</p>
+			<h1 style={{textAlign:"center"}}>Currently editing: {fileName}</h1>
+			<div style={{display:"flex", flexDirection:"column", marginLeft:"10%", paddingTop:"5%"}}>
+				
+				<p className='normal'>Add all possible labels you'd like to give your data.</p>
+				<input ref={label}></input>
+				<div style={{display:"flex", flexDirection:"row"}}>
+				<button onClick={addLabels} className='submit'>Add</button>
+				<button onClick={clearLabels} className='submit'>Clear</button>
+				</div>
 
-			<input ref={label}></input>
-			<button onClick={addLabels}>Add</button>
-			<button onClick={clearLabels}>Clear</button>
-			<h1>Current labels</h1>
-			<ul>
-				{getLabels(fileName).map((label, index) => (
-					<li key={index}>{label}</li>
-				))}
-			</ul>
-			<h1>Choose your label field name</h1>
-			<input ref={labelFieldName}></input>
-			<button onClick={handleLFNClick}>Confirm</button>
-			<h3>{labelFieldValue}</h3>
+				<h1 className='normal'>Current labels:</h1>
+				<ul>
+					{getLabels(fileName).map((label, index) => (
+						<li key={index}>- {label}</li>
+					))}
+				</ul>
+				<h1 className='normal'>Choose your label field name.</h1>
+				<input ref={labelFieldName}></input>
+				<button onClick={handleLFNClick} className='submit'>Confirm</button>
+				<h3>{labelFieldValue}</h3>
+				
+
+				<h1 className='normal'>Choose the fields to label your data upon.</h1>
+				<div style={{display:"flex", flexDirection:"row"}}>
+					{headers.map((item, index) => (
+						<button key={index} className='submit' onClick={() => toggleHeader(index)}>{selectedHeaders.includes(item) ? <p>{item}</p> : <p>{item}</p>}</button>
+					))}
+				</div>
+
+				
+				<Link to={`/labelSetup/${fileName}`}>
+					<button onClick={confirmSelections} className='submit'>Start Labeling</button>
+				</Link>
 			
-
-			<h1>Choose the fields to label your data upon </h1>
-			<div>
-				{headers.map((item, index) => (
-					<button key={index} onClick={() => toggleHeader(index)}>{selectedHeaders.includes(item) ? <h1>{item}</h1> : <h2>{item}</h2>}</button>
-				))}
 			</div>
-
-			
-			<Link to={`/labelSetup/${fileName}`}>
-				<button onClick={confirmSelections}>Start Labeling</button>
-			</Link>
 
 
 
