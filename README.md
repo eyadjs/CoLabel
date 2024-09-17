@@ -1,1 +1,1 @@
-https://co-label-client.vercel.app/ (in progress)
+https://colabel.vercel.app/ (in progress)
