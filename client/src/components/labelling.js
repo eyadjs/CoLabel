@@ -80,8 +80,9 @@ function Labelling() {
 
 
   return (
-    <div>
-    labelling
+    <div className='labelling'>
+
+    <div className='labelling-box'>
     {entries.length > 0 && entries[entryIndex] && (
       <>
       {selectedHeaders.map((header, index) => (
@@ -95,19 +96,19 @@ function Labelling() {
 
     
     {labels.map((label, index) => (
-                <button onClick={() => nextEntry(label)} key={index}>{label}</button>
+                <button className='submit' onClick={() => nextEntry(label)} key={index}>{label}</button>
             ))}
     
     {/* <pre>{JSON.stringify(entries, null, 2)}</pre> */}
 
     <Link to={'/labelSetup/'.concat(fileName)}>
-      <button onClick={finishLabelling}>Label some more</button>
+      <button className='submit' onClick={finishLabelling}>Label some more</button>
     </Link>
 
     <Link to={'/dashboard'}>
-      <button onClick={finishLabelling}>Back to Dashboard</button>
+      <button className='submit' onClick={finishLabelling}>Back to Dashboard</button>
     </Link>
-    
+    </div>
 
 
     </div>

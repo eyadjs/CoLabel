@@ -444,6 +444,17 @@ input {
 }
 
 
+.labelling {
+    display: flex;
+    
+    justify-content: center;
+}
+
+
+.labelling-box {
+    margin-top: 15%;
+}
+
 
 
 
