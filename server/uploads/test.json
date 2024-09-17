@@ -3,18 +3,18 @@
     "name": "John Doe",
     "age": "29",
     "city": "New York",
-    "g": "male"
+    "g": "m"
   },
   {
     "name": "Jane Smith",
     "age": "34",
     "city": "Los Angeles",
-    "g": "female"
+    "g": "m"
   },
   {
     "name": "Bob Johnson",
     "age": "45",
     "city": "Chicago",
-    "g": "male"
+    "g": ""
   }
 ]
