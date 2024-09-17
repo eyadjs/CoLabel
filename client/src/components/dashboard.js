@@ -17,7 +17,7 @@ const Dashboard = () => {
       data.append('files', fileData[i]);
     }
 
-    fetch('http://localhost:5000/upload-multiple', {
+    fetch('https://co-label-server.vercel.app/upload-multiple', {
       method: 'POST',
       body: data,
     })
@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const [filesInfo, setFilesInfo] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:5000/files')
+    fetch('https://co-label-server.vercel.app/files')
       .then((res) => res.json())
       .then((data) => {
         setFilesInfo(data);
@@ -69,7 +69,7 @@ const Dashboard = () => {
 
   const downloadCSV = (fileName) => {
     const rawFileName = fileName.slice(0,-4)
-    const url = `http://localhost:5000/download/${rawFileName}`
+    const url = `https://co-label-server.vercel.app/download/${rawFileName}`
     window.location.href = url
   }
 
