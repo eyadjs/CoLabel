@@ -462,8 +462,8 @@ ul {
   }
   
   li {
-    margin-bottom: 8px;  /* Space between bullet points */
-    line-height: 1.5;    /* Adjust line spacing */
+    margin-bottom: 8px; 
+    line-height: 1.5;   
     font-size: 18px;
     font-weight: 100;
   }
