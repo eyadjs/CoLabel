@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-
+const serverURL = process.env.REACT_APP_SERVER_URL
 const Home = () => {
 
     return (
@@ -59,7 +59,7 @@ const Home = () => {
             <div className='block-2 block '>
               <p className='subheading'>Unlabelled In, Labelled Out</p>
               <p className='description'>
-                We will handle all the nasty work behind the scenes. Just upload your unlabelled .csv file, set a couple parameters, 
+                We will handle all the nasty work behind the scenes. Just upload your unlabelled CSV file, set a couple parameters, 
                 and click away to label.
               </p>
             </div>

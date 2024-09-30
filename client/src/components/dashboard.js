@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
-
+const serverURL = process.env.REACT_APP_SERVER_URL
 const Dashboard = () => {
   const [fileData, setFileData] = useState([]);
 
@@ -17,7 +17,7 @@ const Dashboard = () => {
       data.append('files', fileData[i]);
     }
 
-    fetch('http://localhost:5000/upload-multiple', {
+    fetch(`${serverURL}/upload-multiple`, {
       method: 'POST',
       body: data,
     })
@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const [filesInfo, setFilesInfo] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:5000/files')
+    fetch(`${serverURL}/files`)
       .then((res) => res.json())
       .then((data) => {
         setFilesInfo(data);
@@ -69,7 +69,7 @@ const Dashboard = () => {
 
   const downloadCSV = (fileName) => {
     const rawFileName = fileName.slice(0,-4)
-    const url = `http://localhost:5000/download/${rawFileName}`
+    const url = `${serverURL}/download/${rawFileName}`
     window.location.href = url
   }
 
