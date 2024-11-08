@@ -1,4 +1,4 @@
-const { getRecords } = require('./modifyFiles')
+// const { getRecords } = require('./modifyFiles')
 const fs = require('fs')
 
 async function extractJSON(fileName) {

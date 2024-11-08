@@ -14,10 +14,11 @@ const Dashboard = () => {
     const data = new FormData();
 
     for (let i = 0; i < fileData.length; i++) {
-      data.append('files', fileData[i]);
+      data.append('file', fileData[i]);
     }
 
-    fetch('http://localhost:5000/upload-multiple', {
+    // using firebase upload
+    fetch('http://127.0.0.1:5000/upload', {
       method: 'POST',
       body: data,
     })
@@ -28,7 +29,8 @@ const Dashboard = () => {
         console.log(err.message);
       });
 
-    window.location.reload()
+      // problematic for debugging
+    // window.location.reload()
   };
   
 

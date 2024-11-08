@@ -1,25 +1,30 @@
 const express = require('express')
 const app = express() 
 const cors = require('cors')
-const upload = require('./upload')
-const { clear, fileNames, getRecords, addEmptyLabels, recordsToTempJSON, readJSON, writeJSON, tempJSONtoCSV } = require('./modifyFiles')
+// const upload = require('./upload')
+const { upload, uploadFileToFirebase } = require('./upload');
+const { clear, fileNames, /*getRecords,*/ addEmptyLabels, recordsToTempJSON, readJSON, writeJSON, tempJSONtoCSV } = require('./modifyFiles')
 const { getUnlabelledEntries, extractJSON } = require('./label')
 const csv = require('csvtojson')
-
 const bodyParser = require('body-parser')
 const axios = require('axios')
-
 app.use(bodyParser.json())
 app.use(cors())
 
 // SCRAP THIS
-app.post('/upload-single', upload.single('file'), (req, res) => {
-    res.json(req.file)
-})
+// app.post('/upload-single', upload.single('file'), (req, res) => {
+//     res.json(req.file)
+// })
 
-app.post('/upload-multiple', upload.array('files', 10), (req, res) => {
-  res.json(req.files)
-})
+// app.post('/upload-multiple', upload.array('files', 10), (req, res) => {
+//   res.json(req.files)
+// })
+
+// FIREBASE VERSION - works only for single file uploads.
+app.post('/upload', upload.single('file'), uploadFileToFirebase, (req, res) => {
+  console.log("we loggin")
+  res.status(200).send('File uploaded successfully to Firebase.');
+});
 
 app.get('/clear-uploads', async (req, res) => {
   try {
@@ -30,7 +35,6 @@ app.get('/clear-uploads', async (req, res) => {
       res.status(500).send('An error occurred while clearing the uploads directory.');
   }
 });
-
 
 app.get('/files', async(req, res) => {
   try {
@@ -48,7 +52,6 @@ app.get('/files', async(req, res) => {
 app.get('/:fileName', (req, res) => { // write the js code to be run from this route <3
   res.send(`<h1>${req.params.fileName}</h1>`)
 })
-
 
 let labelFieldName = null
 app.post('/getLabelFieldName', async (req, res) => { // MAKE THIS FILE SPECIFIC, CURRENTLY IT JUST RETURNS WHATEVER's label field name
