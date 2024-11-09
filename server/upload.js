@@ -5,7 +5,7 @@ const serviceAccount = require('./serviceAccountKey.json'); // Update with the p
 // Initialize Firebase Admin SDK
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'gs://colabel-9dd96.appspot.com', // Replace with your Firebase Storage bucket
+  storageBucket: 'colabel-9dd96.appspot.com', // Replace with your Firebase Storage bucket
 });
 
 const bucket = admin.storage().bucket();
@@ -43,4 +43,4 @@ const uploadFileToFirebase = (req, res, next) => {
 };
 
 // Export upload middleware and the Firebase upload function
-module.exports = { upload, uploadFileToFirebase };
+module.exports = { upload, uploadFileToFirebase, bucket };

@@ -8,8 +8,17 @@ const { getUnlabelledEntries, extractJSON } = require('./label')
 const csv = require('csvtojson')
 const bodyParser = require('body-parser')
 const axios = require('axios')
+
+const bucket = require('./upload');
+
+
+
 app.use(bodyParser.json())
 app.use(cors())
+
+
+
+
 
 // SCRAP THIS
 // app.post('/upload-single', upload.single('file'), (req, res) => {

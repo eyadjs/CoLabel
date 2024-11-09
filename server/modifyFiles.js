@@ -4,6 +4,10 @@ const fs = require('fs')
 const axios = require('axios')
 const { extractJSON } = require('./label')
 const { convertArrayToCSV } = require('convert-array-to-csv')
+const { uploadFileToFirebase } = require('./upload')
+
+const { bucket } = require('./upload')
+
 
 async function clear() {
   const dir = './uploads'
@@ -32,14 +36,25 @@ async function addEmptyLabels(records, userChosenLabelName) {
 }
 
 async function fileNames() {
-  const dir = './uploads'
-  const files = await readdir(dir)
+  const dir = 'uploads/'
+
+  // each file is a big ol object
+  const [files] = await bucket.getFiles( { prefix: dir} )
+
+  // files.forEach(file => {
+  //   console.log(file.name)
+  // })
+
+
   let fileInfo = []
 
-  for (let i = 0; i < files.length; i++) {
-    if (files[i].slice(-4) === '.csv') {
+  for (const file of files) {
+
+    // Do only for .csv files
+    if (file.name.slice(-4) === '.csv') {
 
       try {
+        // can make all this work when json is set up
         const numEntriesResponse = await axios.get('http://127.0.0.1:5000/getNumEntries/'.concat(files[i].slice(0,-4)))
         const numEntries = parseInt(numEntriesResponse.data.length, 10)
 
@@ -52,7 +67,7 @@ async function fileNames() {
       } catch {
 
         fileInfo.push({
-          filename : files[i],
+          filename : file.name,
           labelled : 0
         })
       }
@@ -63,6 +78,7 @@ async function fileNames() {
 }
 
 async function recordsToTempJSON(records, fileName) {
+  
   const newFileDir = './uploads/' + fileName.slice(0, -3) + 'json'
   fs.writeFile(newFileDir, JSON.stringify(records, null, 4), (err) => {
     if (err) throw err

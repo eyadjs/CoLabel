@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 
 const Dashboard = () => {
-  const [fileData, setFileData] = useState([]);
+
+
 
   const fileChangeHandler = (e) => {
     setFileData(e.target.files);
   };
 
+  
+  const [fileData, setFileData] = useState([]);
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
