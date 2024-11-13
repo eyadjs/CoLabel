@@ -3,13 +3,11 @@ import { Link } from 'react-router-dom'
 
 const Dashboard = () => {
 
-
-
   const fileChangeHandler = (e) => {
     setFileData(e.target.files);
   };
 
-  
+
   const [fileData, setFileData] = useState([]);
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -49,7 +47,6 @@ const Dashboard = () => {
 
   const allParamsExist = (fileName) => {
     
-
     if (localStorage.getItem(fileName.concat("-LabelFieldName")) === null) {
       return false
     }
@@ -91,28 +88,35 @@ const Dashboard = () => {
 
 
         <div className='dashboard'>
-          <p style={{left:"20%", bottomMargin:"5%", fontSize:"30px", fontWeight:"200"}}>Manage your projects</p>
+          <p style={{left:"20%", bottomMargin:"5%", fontSize:"30px", fontWeight:"200"}}>John's Dashboard</p>
           <div className='file-table'>
           <div className='file-rows'>
+
             <div className='column'>
-              <h2 style={{fontSize:"25px", fontWeight:"200"}}>File Name</h2>
+              <h2 className="text-[25px] font-light">File</h2>
               {filesInfo.map((file) => (
                 <p key={file.filename}>
+                  <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px]'>🗑️</button> 
+                  <button className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0">📥</button> 
                   <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file.filename}</Link>
-                  <button className='download-button' onClick={() => downloadCSV(file.filename)}>
+                  {/* <button className='download-button' onClick={() => downloadCSV(file.filename)}>
                     <img src='download-button.png' className='download-logo'></img>
-                  </button>
+                  </button> */}
                 </p>
                 
 
               ))}
+              
             </div>
+
+            
             <div className='column'>
-              <h2 style={{fontSize:"25px", fontWeight:"200"}}>Label Completion</h2>
+            <h2 className="text-[25px] font-light">Label Progress</h2>
               {filesInfo.map((file) => (
                 <p key={file.filename}>{file.labelled}%</p>
               ))}
             </div>
+
 
           </div>
           <div className='file-upload'>

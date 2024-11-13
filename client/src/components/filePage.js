@@ -8,6 +8,7 @@ export const FilePage = () => {
 
 	const params = useParams()
 	const fileName = params.fileName // get fileindex from this later, easier to use
+
 	const label = useRef()
 	const labelFieldName = useRef()
 

@@ -230,12 +230,15 @@ nav {
 .file-rows {
     display: flex;
     flex-direction: row;
-    justify-content: space-around
+    justify-content: space-around;
+
 }
 
 .column p {
     padding: 0px;
 }
+
+.column {}
 
 .file-upload {
     display: flex;
@@ -267,15 +270,15 @@ nav {
 .file-table {
 
     color: white;
-    background-color: rgba(1, 4, 104, 0.188);
+    /* background-color: rgba(1, 4, 104, 0.188); */
     border-style: solid;
     border-radius: 10px;
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.438);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.274);
     margin: 0px 20% 0% 20%;
     padding-bottom: 200px;
     margin-bottom: 50px;
-    box-shadow: rgba(72, 135, 202, 0.5) 0px 0px 20px 0px;
+    /* box-shadow: rgba(72, 135, 202, 0.5) 0px 0px 20px 0px; */
     z-index: 100;
 
 
