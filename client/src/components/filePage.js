@@ -3,9 +3,11 @@ import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { getLabels } from '../utils'
 
+import { Button, ButtonGroup } from '@mui/material';
+
+
 let numLabels = 0
 export const FilePage = () => {
-
 	const params = useParams()
 	const fileName = params.fileName // get fileindex from this later, easier to use
 
@@ -161,6 +163,8 @@ export const FilePage = () => {
 	useEffect(() => {
         console.log(selectedHeaders);
     }, [selectedHeaders]);
+
+
 	
 	return (
 		
@@ -169,39 +173,44 @@ export const FilePage = () => {
 			<h1 style={{textAlign:"center"}}>Currently editing: {fileName}</h1>
 			<div style={{display:"flex", flexDirection:"column", marginLeft:"10%", paddingTop:"5%"}}>
 				
-				<p className='normal'>Add all possible labels you'd like to give your data.</p>
+				<p >What are all the possible labels you'd like to give your data?</p>
 				<input ref={label}></input>
 				<div style={{display:"flex", flexDirection:"row"}}>
-				<button onClick={addLabels} className='submit'>Add</button>
-				<button onClick={clearLabels} className='submit'>Clear</button>
+				<Button onClick={addLabels} variant='outlined' sx={{ margin: '5px'}}>Add</Button>
+				<Button onClick={clearLabels} variant="outlined" color='error' sx={{ margin: '5px'}}>Clear</Button>
 				</div>
 
-				<h1 className='normal'>Current labels:</h1>
+				<p>Current labels:</p>
 				<ul>
 					{getLabels(fileName).map((label, index) => (
-						<li key={index}>- {label}</li>
+						<p key={index}>· {label}</p>
 					))}
 				</ul>
-				<h1 className='normal'>Choose your label field name.</h1>
+				<p>What would you like to name the column you'll be labelling?</p>
 				<input ref={labelFieldName}></input>
-				<button onClick={handleLFNClick} className='submit'>Confirm</button>
-				<h3>{labelFieldValue}</h3>
+				<Button onClick={handleLFNClick} variant='outlined' sx={{ width:'100px', margin : '5px' }}>Confirm</Button>
+				<p>{labelFieldValue}</p>
 				
 
-				<h1 className='normal'>Choose the fields to label your data upon.</h1>
+				<p>Which columns from your data would you like to see to decide each label?</p>
 				<div style={{display:"flex", flexDirection:"row"}}>
-					{headers.map((item, index) => (
-						<button key={index} className='submit' onClick={() => toggleHeader(index)}>{selectedHeaders.includes(item) ? <p>{item}</p> : <p>{item}</p>}</button>
-					))}
+					<ButtonGroup variant="text" aria-label="Basic button group">
+						{headers.map((item, index) => (
+							<Button sx={{ width:'100px', marginBottom : '50px',  }} key={index} onClick={() => toggleHeader(index)}>
+								{selectedHeaders.includes(item) ? <p className='text-green-800'>{item}</p> : <p className='text-red-800'>{item}
+									</p>}</Button>
+						))}
+					</ButtonGroup>
 				</div>
 
 				
 				<Link to={`/labelSetup/${fileName}`}>
-					<button onClick={confirmSelections} className='submit'>Start Labeling</button>
+					<Button variant="contained" onClick={confirmSelections}>Confirm Options</Button>
 				</Link>
-			
-			</div>
 
+					
+			</div>
+			
 
 
 

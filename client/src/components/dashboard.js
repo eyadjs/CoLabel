@@ -72,7 +72,14 @@ const Dashboard = () => {
   const downloadCSV = (fileName) => {
     const rawFileName = fileName.slice(0,-4)
     const url = `http://localhost:5000/download/${rawFileName}`
-    window.location.href = url
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.style.display = 'none';
+  
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
   }
 
   return (
@@ -99,9 +106,9 @@ const Dashboard = () => {
                   <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px]'>🗑️</button> 
                   <button className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0">📥</button> 
                   <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file.filename}</Link>
-                  {/* <button className='download-button' onClick={() => downloadCSV(file.filename)}>
+                  <button className='download-button' onClick={() => downloadCSV(file.filename)}>
                     <img src='download-button.png' className='download-logo'></img>
-                  </button> */}
+                  </button>
                 </p>
                 
 

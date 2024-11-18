@@ -2,10 +2,14 @@ import { React, useRef, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { numUnlabelledEntries } from '../utils'
+import { Button, ButtonGroup } from '@mui/material';
+
 import axios from 'axios'
 
 
 function LabelSetup() {
+
+  
 
   const chunkSize = useRef()
   const params = useParams()
@@ -73,6 +77,7 @@ function LabelSetup() {
       try {
         const chunkSize = chunkSizeState
         const unlabelledEntries = await numUnlabelledEntries(fileName)
+        console.log("unlabelled entries"+unlabelledEntries)
         setNumUnlabelledEntriesState(unlabelledEntries)
 
         // if (chunkSizeState === null) {
@@ -91,6 +96,8 @@ function LabelSetup() {
       }
     };
 
+    
+
     checkChunkSize();
   }, [chunkSizeState]);
 
@@ -103,9 +110,9 @@ function LabelSetup() {
                 (<h1 style={{fontWeight:"100", fontSize:"30px"}}>All labelled!</h1>) : (
             chunkValidity ?
               (<Link to={`/labelling/${fileName}`}>
-                <button>labelll</button>
+                <Button>labelll</Button>
               </Link>) : (
-              <h1 style={{fontWeight:"100", fontSize:"30px"}}>Enter a valid chunk size</h1>
+              <p>How many entries would you like to label in one go?</p>
               ))
               
             }
@@ -114,7 +121,7 @@ function LabelSetup() {
 
           <div>
             <input ref={chunkSize}></input>
-            <button onClick={confirmLabelChunk} className='submit'>Submit</button>
+            <Button variant="outlined" onClick={confirmLabelChunk} className='submit'>Submit</Button>
           </div>
 
 
@@ -122,13 +129,13 @@ function LabelSetup() {
           <div className='buttons'>
             <div>
               <Link to={'/dashboard'}>
-                  <button onClick={resetParameters} className='submit'>Restart</button> {/* add an are you sure */}
+                  <Button variant='outlined' color='error' onClick={resetParameters}>Restart</Button> {/* add an are you sure */}
               </Link>
             </div>
 
             <div>
               <Link to={'/dashboard'}>
-                  <button className='submit'>Back to Dashboard</button>
+                  <Button variant='outlined'>Back to Dashboard</Button>
               </Link>
             </div> 
           </div>

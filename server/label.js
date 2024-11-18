@@ -1,10 +1,14 @@
 // const { getRecords } = require('./modifyFiles')
 const fs = require('fs')
+const { bucket } = require('./upload');
+
 
 async function extractJSON(fileName) {
-    const filePath = `./uploads/${fileName}`
-    const data = fs.readFileSync(filePath, 'utf8')
-    const jsonData = JSON.parse(data)
+    const file = bucket.file(`uploads/${fileName}`);
+    const [fileContent] = await file.download()
+    console.log("hi")
+    const jsonData = JSON.parse(fileContent.toString('utf8'))
+
     return jsonData
 }
 

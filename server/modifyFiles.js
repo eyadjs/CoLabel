@@ -1,5 +1,6 @@
 const { readdir, rm } = require('fs/promises')
 const { parse } = require('csv-parse')
+const { Readable } = require('stream');
 const fs = require('fs')
 const axios = require('axios')
 const { extractJSON } = require('./label')
@@ -17,7 +18,9 @@ async function clear() {
 }
 
 async function getRecords(fileName) {
-  const filePath = `./uploads/${fileName}`;
+  const file = bucket.file(`uploads/${fileName}`);
+  const [fileData] = await file.download();
+
   return new Promise((resolve, reject) => {
     const parser = parse({ columns: true }, (err, records) => {
       if (err) {
@@ -25,7 +28,9 @@ async function getRecords(fileName) {
       }
       resolve(records);
     });
-    fs.createReadStream(filePath).pipe(parser);
+
+    // Create a readable stream from the buffer and pipe it to the parser
+    Readable.from(fileData).pipe(parser);
   });
 }
 
@@ -61,13 +66,13 @@ async function fileNames() {
         const numUnlabelledEntriesResponse = await axios.get('http://127.0.0.1:5000/getNumUnlabelledEntries/'.concat(files[i].slice(0,-4)))
         const numUnlabelledEntries = parseInt(numUnlabelledEntriesResponse.data.length, 10)
         fileInfo.push({
-          filename : files[i],
+          filename : file.name.slice(dir.length),
           labelled : ((numEntries - numUnlabelledEntries) / numEntries) * 100
         })
       } catch {
 
         fileInfo.push({
-          filename : file.name,
+          filename : file.name.slice(dir.length),
           labelled : 0
         })
       }
@@ -78,12 +83,28 @@ async function fileNames() {
 }
 
 async function recordsToTempJSON(records, fileName) {
-  
-  const newFileDir = './uploads/' + fileName.slice(0, -3) + 'json'
-  fs.writeFile(newFileDir, JSON.stringify(records, null, 4), (err) => {
-    if (err) throw err
-    console.log("Records have been converted to json.")
-  })
+  try {
+    const jsonString = JSON.stringify(records, null, 4);
+    const file = bucket.file(`uploads/${fileName.slice(0, -3)}json`); 
+
+    const stream = file.createWriteStream({
+      metadata: {
+        contentType: 'application/json', 
+      },
+    });
+
+    stream.on('error', (err) => {
+      console.error('Error uploading JSON to Firebase:', err);
+    });
+
+    stream.on('finish', () => {
+      console.log('Records have been converted to JSON and uploaded to Firebase.');
+    });
+
+    stream.end(jsonString);
+  } catch (err) {
+    console.error('Error in converting records to JSON:', err);
+  }
 }
 
 async function readJSON(fileName) {
@@ -92,51 +113,74 @@ async function readJSON(fileName) {
     return JSON.parse(data);
   } catch (err) {
     console.error('Error reading JSON file:', err);
-    throw err; // Re-throw the error to be caught by the caller
+    throw err; 
   }
 }
 
 
-async function writeJSON(fileName, updatedRecords) {
+async function writeJSON(fileName, jsonData) {
   try {
-    await fs.writeFileSync('./uploads/' + fileName, JSON.stringify(updatedRecords, null, 2));
-    console.log('written to JSON file');
+    // Create a mock req.file object to pass to uploadFileToFirebase
+    const buffer = Buffer.from(JSON.stringify(jsonData, null, 2)); // Convert JSON to a buffer
+    const req = {
+      file: {
+        originalname: fileName,
+        mimetype: 'application/json',
+        buffer: buffer,
+      },
+    };
+
+    // Use uploadFileToFirebase to upload the JSON buffer to Firebase Storage
+    await new Promise((resolve, reject) => {
+      uploadFileToFirebase(req, null, (err) => {
+        if (err) reject(err);
+        resolve();
+      });
+    });
+
+    console.log('JSON file uploaded successfully to Firebase:', fileName);
   } catch (err) {
-    console.error(err);
+    console.error('Error uploading JSON file:', err);
   }
 }
 
-async function tempJSONtoCSV(fileName) {
+const tempJSONtoCSV = async (fileName) => {
   try {
-    const records = await extractJSON(fileName)
-    let headers = Object.keys(records[0])
-    let fields = []
-    fields.push(headers)
+    const records = await extractJSON(fileName);
+    let headers = Object.keys(records[0]);
+    let fields = [];
+    fields.push(headers);
     for (let i = 0; i < records.length; i++) {
-      fields.push(Object.values(records[i]))
+      fields.push(Object.values(records[i]));
     }
 
     const newCSV = convertArrayToCSV(fields, {
       headers,
       separator: ','
-    }) 
-
-    if (!fs.existsSync('./results')) {
-      fs.mkdirSync('./results', { recursive: true });
-    }
-
-    const newFileName = fileName.slice(0,-5).concat('.csv')
-    fs.writeFile(`./results/${newFileName}`, newCSV, (err) => {
-      if (err) {
-        console.error('Error writing to CSV file', err);
-      } else {
-        console.log('CSV file saved successfully to /results');
-      }
     });
+
+    // Upload CSV to Firebase
+    const blob = bucket.file(`results/${fileName.slice(0, -5)}.csv`);  // Firebase storage path
+    const stream = blob.createWriteStream({
+      metadata: {
+        contentType: 'text/csv',
+      },
+    });
+
+    stream.on('error', (err) => {
+      console.error('Error uploading CSV to Firebase:', err);
+    });
+
+    stream.on('finish', () => {
+      console.log('CSV file successfully uploaded to Firebase');
+    });
+
+    stream.end(newCSV); // Upload the CSV content to Firebase
   } catch (err) {
-    console.error(err)
+    console.error('Error during JSON to CSV conversion:', err);
   }
-}
+};
+
 
 
 module.exports = { clear, fileNames, getRecords, addEmptyLabels, recordsToTempJSON, readJSON, writeJSON, tempJSONtoCSV }

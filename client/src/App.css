@@ -395,7 +395,7 @@ nav {
 }
 
 .submit {
-    background-color: rgb(198, 179, 245);
+    background-color: #c6b3f5;
     transition: all 0.3s ease 0s;
     height: 40px;
     width: 100px;
@@ -408,7 +408,7 @@ nav {
 
 .submit:hover {
     cursor: pointer;
-    background-color:   rgb(134, 107, 200);
+    background-color:   #866bc8;
     
 }
 

@@ -3,13 +3,16 @@ const app = express()
 const cors = require('cors')
 // const upload = require('./upload')
 const { upload, uploadFileToFirebase } = require('./upload');
-const { clear, fileNames, /*getRecords,*/ addEmptyLabels, recordsToTempJSON, readJSON, writeJSON, tempJSONtoCSV } = require('./modifyFiles')
+const { clear, fileNames, getRecords, addEmptyLabels, recordsToTempJSON, readJSON, writeJSON, tempJSONtoCSV } = require('./modifyFiles')
 const { getUnlabelledEntries, extractJSON } = require('./label')
 const csv = require('csvtojson')
 const bodyParser = require('body-parser')
 const axios = require('axios')
+const admin = require('firebase-admin')
+const fs = require('fs')
+const path = require('path')
 
-const bucket = require('./upload');
+const { bucket } = require('./upload');
 
 
 
@@ -35,6 +38,8 @@ app.post('/upload', upload.single('file'), uploadFileToFirebase, (req, res) => {
   res.status(200).send('File uploaded successfully to Firebase.');
 });
 
+
+// FIX OR SCRAP OR CHANGE TO CLEAR 1 FILE AT A TIME - USELESS!
 app.get('/clear-uploads', async (req, res) => {
   try {
       await clear();
@@ -49,7 +54,6 @@ app.get('/files', async(req, res) => {
   try {
     const files = await fileNames()
     res.json(files)
-    
     
   } 
   catch (err) {
@@ -74,8 +78,6 @@ let chunkSize = null
 app.post('/getChunkSize/:fileName', (req, res) => {
   chunkSize = req.body.data
   res.json("getChunkSize")
-  console.log("consoling")
-  console.log(chunkSize)
 })
 
 app.post('/addEmptyLabels/:fileName', async (req, res) => { // AKA CONFIRM SELECTIONS, START LABELLING
@@ -152,6 +154,19 @@ app.get('/getNumUnlabelledEntries/:rawFileName', async (req, res) => {
   }
 })
 
+
+
+// STRICTLY FOR TESTING FUNCTIONS, CHANGE IN ANY WAY
+app.get('/test/:rawFileName', async (req, res) => {
+  try {
+    const fileName = req.params.rawFileName
+    let records = await tempJSONtoCSV(fileName)
+    res.json( {1 : 1} )
+  } catch (error) {
+    res.status(500).json({ error: 'test not workin brev' })
+  }
+})
+
 app.get('/getNumEntries/:rawFileName', async (req, res) => {
   try {
     const fileName = req.params.rawFileName.concat('.json')
@@ -165,28 +180,45 @@ app.get('/getNumEntries/:rawFileName', async (req, res) => {
 })
 
 // file downloads
+app.get('/download/:rawFileName', async (req, res) => {
 
-app.get('/download/:rawFileName', (req, res) => {
-  const rawFileName = req.params.rawFileName
-  tempJSONtoCSV(rawFileName.concat('.json'))
-  const filePath = `./results/${rawFileName}.csv`
+  const rawFileName = req.params.rawFileName;
+  
+  await tempJSONtoCSV(rawFileName.concat('.json')) //  TESTING THIS HERE, IF BUGGY MOVE TO ANOTHER ROUTE
 
-  res.download(filePath, (err) => {
-    if (err) {
-      console.error(err)
-      res.status(500).send("Error downloading this file.")
-    }
-  })
-})
+  const filePath = bucket.file(`results/${rawFileName}.csv`);
+
+  // Attempt to read the file from Firebase
+  filePath.createReadStream()
+    .on('error', (err) => {
+      console.error(err);
+      res.status(500).send("Error downloading the file from Firebase.");
+    })
+    .on('finish', () => {
+      console.log("File download completed.");
+    })
+    .pipe(res);  // Pipe the file content to the response
+
+  // Set headers for the file download
+  res.setHeader('Content-Type', 'application/octet-stream');  // Appropriate MIME type
+  res.setHeader('Content-Disposition', `attachment; filename=${rawFileName}.csv`);  // Set filename for the download
+});
+
 
 app.get('/headers/:rawFileName', async (req, res) => {
 
   try {
   const rawFileName = req.params.rawFileName
   const fileName = rawFileName.concat('.csv')
-  const csvData = await csv().fromFile(`./uploads/${fileName}`)
+
+  // getting file from firebase instead
+  const file = bucket.file(`uploads/${fileName}`)
+  const [fileData] = await file.download()
+  const csvData = await csv().fromString(fileData.toString());
+
   let headers = Object.keys(csvData[0])
   res.json({headers: headers})
+
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }

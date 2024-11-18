@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Button, ButtonGroup } from '@mui/material';
 
 const Home = () => {
 
@@ -33,8 +34,8 @@ const Home = () => {
           <div className='description'>
             <p>Expedite the <span className='highlight'>boring</span>, <span className='highlight'>agonizing</span> part of developing AI models</p>
           </div>
-          <div className='get-started'>
-            <Link to={"/dashboard"}><button>Get Started</button></Link>
+          <div className=''>
+            <Link to={"/dashboard"}><Button variant='outlined' size="large" sx={{ color: "#c6b3f5", borderColor: "#c6b3f5" }}>Get Started</Button></Link>
           </div>
         </div>
         <div className='right'>
@@ -88,48 +89,41 @@ const Home = () => {
           <p className='tutorial-text'>After setting up your account, proceed to your dashboard where you will see your currently uploaded files.</p>
           <p className='tutorial-text'>Here, you can add, delete, access, manage, and check the progress of your projects:</p>
           <div className='dashboard'>
-          {/* <p style={{left:"20%", bottomMargin:"5%", fontSize:"30px", fontWeight:"200"}}>Manage your projects</p> */}
+
           <div className='file-table'>
           <div className='file-rows'>
+
             <div className='column'>
-              <h2 style={{fontSize:"25px", fontWeight:"200"}}>File Name</h2>
+              <h2 className="text-[25px] font-light">File</h2>
                 <p>
+                  <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px]'>🗑️</button> 
+                  <button className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0">📥</button> 
                   fruits-dataset.csv
-                  <button className='download-button'>
-                    <img src='download-button.png' className='download-logo'></img>
-                  </button>
                 </p>
                 <p>
+                  <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px]'>🗑️</button> 
+                  <button className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0">📥</button> 
                   students.csv
-                  <button className='download-button'>
-                    <img src='download-button.png' className='download-logo'></img>
-                  </button>
                 </p>
                 <p>
+                  <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px]'>🗑️</button> 
+                  <button className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0">📥</button> 
                   cars.csv
-                  <button className='download-button'>
-                    <img src='download-button.png' className='download-logo'></img>
-                  </button>
                 </p>
                 
+            </div>
 
-            </div>
+            
             <div className='column'>
-              <h2 style={{fontSize:"25px", fontWeight:"200"}}>Label Completion</h2>
-                <p>20%</p>
-                <p>54%</p>
-                <p>100%</p>
+            <h2 className="text-[25px] font-light">Label Progress</h2>
+              <p>21%</p>
+              <p>54%</p>
+              <p>100%</p>
             </div>
+
 
           </div>
-          {/* <div className='file-upload'>
-            <form onSubmit={onSubmitHandler}>
-              <label className='choose-files'>
-                <input type="file" multiple onChange={fileChangeHandler}></input>
-              </label>
-              <button type="submit" className='submit'>Submit</button>
-            </form>
-          </div> */}
+
           </div>
       </div>
           <p className='warning'>Ensure you have uploaded a .csv file as your unlabelled dataset!</p>
