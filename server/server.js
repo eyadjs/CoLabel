@@ -66,12 +66,15 @@ app.get('/:fileName', (req, res) => { // write the js code to be run from this r
   res.send(`<h1>${req.params.fileName}</h1>`)
 })
 
-let labelFieldName = null
-app.post('/getLabelFieldName', async (req, res) => { // MAKE THIS FILE SPECIFIC, CURRENTLY IT JUST RETURNS WHATEVER's label field name
-  labelFieldName = req.body.data
+let labelFieldNames = {}
+app.post('/getLabelFieldName/:fileName', async (req, res) => { // MAKE THIS FILE SPECIFIC, CURRENTLY IT JUST RETURNS WHATEVER's label field name
+  const { fileName } = req.params
+  const { data } = req.body
+  console.log("setting lfn " + data)
+  labelFieldNames[fileName] = data
 
   res.send({})
-  console.log("LFN is "+labelFieldName)
+  // console.log("LFN is "+labelFieldName)
 })
 
 let chunkSize = null
@@ -84,7 +87,7 @@ app.post('/addEmptyLabels/:fileName', async (req, res) => { // AKA CONFIRM SELEC
   try {
 
     const records = await getRecords(req.params.fileName)
-    await addEmptyLabels(records, labelFieldName)
+    await addEmptyLabels(records, labelFieldNames[req.params.fileName])
     await recordsToTempJSON(records, req.params.fileName)
     res.send(records) // Stored in JSON with same filename
     /*
@@ -109,8 +112,9 @@ app.post('/addEmptyLabels/:fileName', async (req, res) => { // AKA CONFIRM SELEC
 
 app.get('/sendEntriesForLabelling/:fileName', async (req, res) => {
   try {
-    const fileNameRaw = req.params.fileName
-    const unlabelledEntry = await getUnlabelledEntries(fileNameRaw, chunkSize, labelFieldName)
+    const fileNameJSON = req.params.fileName
+    const fileNameCSV = fileNameJSON.slice(0,-5).concat(".csv")
+    const unlabelledEntry = await getUnlabelledEntries(fileNameJSON, chunkSize, labelFieldNames[fileNameCSV])
     res.send(unlabelledEntry)
   } catch {
     res.status(500).send(error)
@@ -138,11 +142,13 @@ app.post('/updateRecords/:rawFileName',  async (req, res) => {
 app.get('/getNumUnlabelledEntries/:rawFileName', async (req, res) => {
   try {
     const fileName = req.params.rawFileName.concat('.json')
+    const fileNameCSV = req.params.rawFileName.concat('.csv')
     let records = await extractJSON(fileName)
     
     let numUnlabelledEntries = 0
+    console.log("from backend, lfn: "+ labelFieldNames[fileNameCSV])
     for (let i = 0; i < records.length; i++) {
-      if (records[i][labelFieldName] === "") {
+      if (records[i][labelFieldNames[fileNameCSV]] === "") {
         numUnlabelledEntries++
       }
     }

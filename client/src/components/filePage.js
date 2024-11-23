@@ -4,6 +4,7 @@ import axios from 'axios'
 import { getLabels } from '../utils'
 
 import { Button, ButtonGroup } from '@mui/material';
+import { getRawFileName } from '../App';
 
 
 let numLabels = 0
@@ -79,7 +80,7 @@ export const FilePage = () => {
 		if (labelFieldName.current.value.trim().length === 0) {
 			return 0
 		}
-		const response = await fetch('http://127.0.0.1:5000/getLabelFieldName', {
+		const response = await fetch('http://127.0.0.1:5000/getLabelFieldName/' + fileName, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ export const FilePage = () => {
 	const handleLFNClick = () => {
 		sendLFNtoServer()
 		addLabelFieldName()
-		console.log(labelFieldName.current.value)
+		console.log("lfn from frontend "+labelFieldName.current.value)
 	}
 
 

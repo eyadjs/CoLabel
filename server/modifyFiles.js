@@ -60,17 +60,17 @@ async function fileNames() {
 
       try {
         // can make all this work when json is set up
-        const numEntriesResponse = await axios.get('http://127.0.0.1:5000/getNumEntries/'.concat(files[i].slice(0,-4)))
+        fileName = file.name.slice(dir.length) //  remove /uploads from filename
+        const numEntriesResponse = await axios.get('http://127.0.0.1:5000/getNumEntries/'.concat(fileName.slice(0,-4)))
         const numEntries = parseInt(numEntriesResponse.data.length, 10)
 
-        const numUnlabelledEntriesResponse = await axios.get('http://127.0.0.1:5000/getNumUnlabelledEntries/'.concat(files[i].slice(0,-4)))
+        const numUnlabelledEntriesResponse = await axios.get('http://127.0.0.1:5000/getNumUnlabelledEntries/'.concat(fileName.slice(0,-4)))
         const numUnlabelledEntries = parseInt(numUnlabelledEntriesResponse.data.length, 10)
         fileInfo.push({
-          filename : file.name.slice(dir.length),
+          filename : fileName,
           labelled : ((numEntries - numUnlabelledEntries) / numEntries) * 100
         })
       } catch {
-
         fileInfo.push({
           filename : file.name.slice(dir.length),
           labelled : 0

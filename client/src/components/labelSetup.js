@@ -22,7 +22,7 @@ function LabelSetup() {
     setChunkSizeState(chunkSize.current.value)
   }
 
-  const [chunkSizeState, setChunkSizeState] = useState(-1) 
+  const [chunkSizeState, setChunkSizeState] = useState(null) 
   const getChunkSize = () => {
     return localStorage.getItem(fileName.concat("-labelChunk"))
   }
@@ -69,8 +69,8 @@ function LabelSetup() {
   //   return false
   // }
 
-  const [chunkValidity, setChunkValidity] = useState()
-  const [numUnlabelledEntriesState, setNumUnlabelledEntriesState] = useState()
+  const [chunkValidity, setChunkValidity] = useState(null)
+  const [numUnlabelledEntriesState, setNumUnlabelledEntriesState] = useState(null)
 
   useEffect(() => {
     const checkChunkSize = async () => {
@@ -79,32 +79,22 @@ function LabelSetup() {
         const unlabelledEntries = await numUnlabelledEntries(fileName)
         console.log("unlabelled entries"+unlabelledEntries)
         setNumUnlabelledEntriesState(unlabelledEntries)
-
-        // if (chunkSizeState === null) {
-        //   localStorage.setItem(fileName.concat("-labelChunk"), -1)
-        //   // SAFETY NET, THIS CODE SHOULD NOT EVER EXECUTE SINCE CHUNKSIZE IS INITIALIZED TO -1
-        // }
-
-        // if (chunkSizeState === -1) {
-        //   setChunkValidity(true)
-        //   return
-        // }
-
-        setChunkValidity(numUnlabelledEntriesState >= chunkSize)
+        if (chunkSize !== null) {
+          setChunkValidity(unlabelledEntries >= chunkSize)
+        }
       } catch (error) {
         console.error(error)
       }
     };
-
-    
-
     checkChunkSize();
-  }, [chunkSizeState]);
+  }, [chunkSizeState, fileName, numUnlabelledEntriesState]);
+
+  console.log("chunk valid: "+chunkValidity)
+  console.log("chink size: " + chunkSizeState)
 
   return (
     <div className='chunkPage'>
         <div className='selectChunkSize'>
-
         <div>
             { (numUnlabelledEntriesState === 0) ? 
                 (<h1 style={{fontWeight:"100", fontSize:"30px"}}>All labelled!</h1>) : (
@@ -116,7 +106,12 @@ function LabelSetup() {
               ))
               
             }
-          </div>
+        </div>
+        
+        <p>Unlabelled entries: {numUnlabelledEntriesState}</p>
+        <p>Chunk size: {chunkSizeState}</p>
+        <p>Chunk validity: {chunkValidity}</p>
+
 
 
           <div>

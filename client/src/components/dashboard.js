@@ -89,13 +89,14 @@ const Dashboard = () => {
         <div className='top'>
           
 
-          <p className='top-title'>Dashboard</p>
+          <p className='text-xl'>Manage your projects</p>
         </div>
                 
 
 
         <div className='dashboard'>
-          <p style={{left:"20%", bottomMargin:"5%", fontSize:"30px", fontWeight:"200"}}>John's Dashboard</p>
+          {/* <p className='text-xl mr-10' style={{left:"20%", bottomMargin:"0%"}}> Dashboard</p> */}
+          {/* <p className='text-xl mr-10'>Manage your projects</p> */}
           <div className='file-table'>
           <div className='file-rows'>
 
@@ -103,12 +104,12 @@ const Dashboard = () => {
               <h2 className="text-[25px] font-light">File</h2>
               {filesInfo.map((file) => (
                 <p key={file.filename}>
-                  <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px]'>🗑️</button> 
-                  <button className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0">📥</button> 
+                  <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px] hover:cursor-pointer' >🗑️</button> 
+                  <button onClick={() => downloadCSV(file.filename)} className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 hover:cursor-pointer">📥</button> 
                   <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file.filename}</Link>
-                  <button className='download-button' onClick={() => downloadCSV(file.filename)}>
+                  {/* <button className='download-button' onClick={() => downloadCSV(file.filename)}>
                     <img src='download-button.png' className='download-logo'></img>
-                  </button>
+                  </button> */}
                 </p>
                 
 
