@@ -68,12 +68,16 @@ async function fileNames() {
         const numUnlabelledEntries = parseInt(numUnlabelledEntriesResponse.data.length, 10)
         fileInfo.push({
           filename : fileName,
-          labelled : ((numEntries - numUnlabelledEntries) / numEntries) * 100
+          labelled : (((numEntries - numUnlabelledEntries) / numEntries) * 100).toFixed(0),
+          lastModified : "Never",
+          uploadDate : "-"
         })
       } catch {
         fileInfo.push({
           filename : file.name.slice(dir.length),
-          labelled : 0
+          labelled : 0,
+          lastModified : "Never",
+          uploadDate : "-"
         })
       }
     }

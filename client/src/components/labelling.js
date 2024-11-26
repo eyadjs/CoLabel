@@ -43,8 +43,14 @@ function Labelling() {
   const finishLabelling = async () => {
       try {
         localStorage.removeItem(fileName.concat("-labelChunk"))
+
+        const lastModified = new Date()
+        const lastModifiedDate = lastModified.toISOString().split('T')[0];
+        localStorage.setItem(fileName.concat("-lastModified"), lastModifiedDate)
+
         await axios.post('http://127.0.0.1:5000/updateRecords/' + getRawFileName(fileName), { entries });
-        
+
+      
         alert('Labelled entries sent to backend');
       } catch (error) {
         console.error('Error sending entries:', error);

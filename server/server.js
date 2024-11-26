@@ -12,6 +12,8 @@ const admin = require('firebase-admin')
 const fs = require('fs')
 const path = require('path')
 
+const os = require('os');
+
 const { bucket } = require('./upload');
 
 
@@ -40,6 +42,7 @@ app.post('/upload', upload.single('file'), uploadFileToFirebase, (req, res) => {
 
 
 // FIX OR SCRAP OR CHANGE TO CLEAR 1 FILE AT A TIME - USELESS!
+// SHOULD ALSO REMOVE LFN FROM LFN.JSON WHEN FILE IS REMOVED - ADD THIS SOON!
 app.get('/clear-uploads', async (req, res) => {
   try {
       await clear();
@@ -65,13 +68,43 @@ app.get('/files', async(req, res) => {
 app.get('/:fileName', (req, res) => { // write the js code to be run from this route <3
   res.send(`<h1>${req.params.fileName}</h1>`)
 })
+const tempFilePath = path.join(os.tmpdir(), 'labelFieldNames.json');
 
-let labelFieldNames = {}
+
+
+const loadLabelFieldNames = async () => {
+  try {
+    const file = bucket.file('labelFieldNames.json')
+
+    await file.download({destination: tempFilePath })
+    return JSON.parse(fs.readFileSync(tempFilePath, 'utf-8'))
+
+  } catch (error) {
+    console.error("error loading label field names from firebase")
+    return {}
+    
+  }
+}
+
+labelFieldNames = {};
+
+const saveLabelFieldNames = async (LFNs) => {
+  try {
+    fs.writeFileSync(tempFilePath, JSON.stringify(LFNs, null, 2))
+    await bucket.upload(tempFilePath, {destination: 'labelFieldNames.json'})
+  } catch (err) {
+    console.error("error saving label field names to firebase")
+  }
+}
+
+
 app.post('/getLabelFieldName/:fileName', async (req, res) => { // MAKE THIS FILE SPECIFIC, CURRENTLY IT JUST RETURNS WHATEVER's label field name
   const { fileName } = req.params
   const { data } = req.body
   console.log("setting lfn " + data)
+  
   labelFieldNames[fileName] = data
+  await saveLabelFieldNames(labelFieldNames)
 
   res.send({})
   // console.log("LFN is "+labelFieldName)
@@ -146,6 +179,7 @@ app.get('/getNumUnlabelledEntries/:rawFileName', async (req, res) => {
     let records = await extractJSON(fileName)
     
     let numUnlabelledEntries = 0
+    labelFieldNames = await loadLabelFieldNames()
     console.log("from backend, lfn: "+ labelFieldNames[fileNameCSV])
     for (let i = 0; i < records.length; i++) {
       if (records[i][labelFieldNames[fileNameCSV]] === "") {

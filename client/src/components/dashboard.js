@@ -16,7 +16,14 @@ const Dashboard = () => {
 
     for (let i = 0; i < fileData.length; i++) {
       data.append('file', fileData[i]);
+      const uploadDate = new Date()
+      const justDate = uploadDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+      localStorage.setItem(fileData[i].name.concat("-uploadDate"), justDate)
+      console.log(fileData[i])
     }
+
+
+    
 
     // using firebase upload
     fetch('http://127.0.0.1:5000/upload', {
@@ -31,7 +38,7 @@ const Dashboard = () => {
       });
 
       // problematic for debugging
-    // window.location.reload()
+    window.location.reload()
   };
   
 
@@ -43,6 +50,11 @@ const Dashboard = () => {
         setFilesInfo(data);
       });
   }, []);
+
+  filesInfo.map(file => {
+    file.uploadDate = localStorage.getItem(file.filename.concat("-uploadDate")) || "-"
+    file.lastModified = localStorage.getItem(file.filename.concat("-lastModified")) || "Never"
+  })
 
 
   const allParamsExist = (fileName) => {
@@ -70,6 +82,7 @@ const Dashboard = () => {
   }
 
   const downloadCSV = (fileName) => {
+    // fix this, still opens new tab sometimes
     const rawFileName = fileName.slice(0,-4)
     const url = `http://localhost:5000/download/${rawFileName}`
     const a = document.createElement('a');
@@ -107,9 +120,6 @@ const Dashboard = () => {
                   <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px] hover:cursor-pointer' >🗑️</button> 
                   <button onClick={() => downloadCSV(file.filename)} className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 hover:cursor-pointer">📥</button> 
                   <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file.filename}</Link>
-                  {/* <button className='download-button' onClick={() => downloadCSV(file.filename)}>
-                    <img src='download-button.png' className='download-logo'></img>
-                  </button> */}
                 </p>
                 
 
@@ -122,6 +132,20 @@ const Dashboard = () => {
             <h2 className="text-[25px] font-light">Label Progress</h2>
               {filesInfo.map((file) => (
                 <p key={file.filename}>{file.labelled}%</p>
+              ))}
+            </div>
+
+            <div className='column'>
+            <h2 className="text-[25px] font-light">Last Modified</h2>
+              {filesInfo.map((file) => (
+                <p key={file.filename}>{file.lastModified}</p>
+              ))}
+            </div>
+
+            <div className='column'>
+            <h2 className="text-[25px] font-light">Upload date</h2>
+              {filesInfo.map((file) => (
+                <p key={file.filename}>{file.uploadDate}</p>
               ))}
             </div>
 

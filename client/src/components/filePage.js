@@ -96,9 +96,6 @@ export const FilePage = () => {
 		console.log("lfn from frontend "+labelFieldName.current.value)
 	}
 
-
-
-
 	const proceedToLabelling = async () => {
 		try {
 			const response = await axios.post('http://127.0.0.1:5000/addEmptyLabels/' + fileName)

@@ -53,7 +53,9 @@ function LabelSetup() {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key.split('-')[0] === fileName) {
-        keysToRemove.push(key)
+        if (key.split('-')[1] !== "uploaDate") {
+          keysToRemove.push(key)
+        }
       }
     }
     
