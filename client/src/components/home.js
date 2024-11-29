@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, ButtonGroup } from '@mui/material';
 
 const Home = () => {
+
 
     return (
         <div>
@@ -35,7 +36,7 @@ const Home = () => {
             <p>Expedite the <span className='highlight'>boring</span>, <span className='highlight'>agonizing</span> part of developing AI models</p>
           </div>
           <div className=''>
-            <Link to={"/dashboard"}><Button variant='outlined' size="large" sx={{ color: "#c6b3f5", borderColor: "#c6b3f5" }}>Get Started</Button></Link>
+            <Link to={"/register"}><Button variant='outlined' size="large" sx={{ color: "#c6b3f5", borderColor: "#c6b3f5" }}>Get Started</Button></Link>
           </div>
         </div>
         <div className='right'>

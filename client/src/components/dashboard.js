@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import RowSkeleton from './rowSkeleton';
+
 
 const Dashboard = () => {
 
@@ -41,15 +45,16 @@ const Dashboard = () => {
     window.location.reload()
   };
   
-
+  const [isFetchingFiles, setIsFetchingFiles] = useState(true);
   const [filesInfo, setFilesInfo] = useState([]);
   useEffect(() => {
     fetch('http://localhost:5000/files')
       .then((res) => res.json())
       .then((data) => {
-        setFilesInfo(data);
-      });
-  }, []);
+        setFilesInfo(data)
+        setIsFetchingFiles(false)
+      })
+  }, [])
 
   filesInfo.map(file => {
     file.uploadDate = localStorage.getItem(file.filename.concat("-uploadDate")) || "-"
@@ -99,6 +104,8 @@ const Dashboard = () => {
 
     
       <div className='dashboard-page'>
+
+        {/* <p>{filesInfo[0]?.uploadDate || <Skeleton></Skeleton>}</p> */}
         <div className='top'>
           
 
@@ -108,18 +115,19 @@ const Dashboard = () => {
 
 
         <div className='dashboard'>
-          {/* <p className='text-xl mr-10' style={{left:"20%", bottomMargin:"0%"}}> Dashboard</p> */}
-          {/* <p className='text-xl mr-10'>Manage your projects</p> */}
           <div className='file-table'>
           <div className='file-rows'>
 
             <div className='column'>
               <h2 className="text-[25px] font-light">File</h2>
+              {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+              {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+              {/* STORE NUMBER OF files LOCALLY SO IT CAN BE USED TO RENDER CORRECT NUMBER OF SKELETONS */}
               {filesInfo.map((file) => (
                 <p key={file.filename}>
                   <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px] hover:cursor-pointer' >🗑️</button> 
                   <button onClick={() => downloadCSV(file.filename)} className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 hover:cursor-pointer">📥</button> 
-                  <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file.filename}</Link>
+                  <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file?.filename  || <Skeleton></Skeleton>}</Link>
                 </p>
                 
 
@@ -129,23 +137,33 @@ const Dashboard = () => {
 
             
             <div className='column'>
+              
             <h2 className="text-[25px] font-light">Label Progress</h2>
+
+              {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+              {isFetchingFiles && <RowSkeleton></RowSkeleton>}
               {filesInfo.map((file) => (
-                <p key={file.filename}>{file.labelled}%</p>
+                <p key={file.filename}>{file?.labelled}%</p>
               ))}
+
             </div>
 
             <div className='column'>
+              
             <h2 className="text-[25px] font-light">Last Modified</h2>
+            {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+            {isFetchingFiles && <RowSkeleton></RowSkeleton>}
               {filesInfo.map((file) => (
-                <p key={file.filename}>{file.lastModified}</p>
+                <p key={file.filename}>{file?.lastModified  || <Skeleton></Skeleton>}</p>
               ))}
             </div>
 
             <div className='column'>
             <h2 className="text-[25px] font-light">Upload date</h2>
+            {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+            {isFetchingFiles && <RowSkeleton></RowSkeleton>}
               {filesInfo.map((file) => (
-                <p key={file.filename}>{file.uploadDate}</p>
+                <p key={file.filename}>{file?.uploadDate  || <Skeleton></Skeleton>}</p>
               ))}
             </div>
 

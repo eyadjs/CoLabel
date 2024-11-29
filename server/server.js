@@ -68,9 +68,12 @@ app.get('/files', async(req, res) => {
 app.get('/:fileName', (req, res) => { // write the js code to be run from this route <3
   res.send(`<h1>${req.params.fileName}</h1>`)
 })
+
+
+
+
+labelFieldNames = {};
 const tempFilePath = path.join(os.tmpdir(), 'labelFieldNames.json');
-
-
 
 const loadLabelFieldNames = async () => {
   try {
@@ -85,9 +88,6 @@ const loadLabelFieldNames = async () => {
     
   }
 }
-
-labelFieldNames = {};
-
 const saveLabelFieldNames = async (LFNs) => {
   try {
     fs.writeFileSync(tempFilePath, JSON.stringify(LFNs, null, 2))
