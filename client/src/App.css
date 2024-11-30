@@ -496,3 +496,103 @@ ul {
     margin-bottom: "20px";
 }
 
+
+/* Wrapper to center the container */
+.center-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #000; /* Black background */
+  }
+  
+  /* Shared container styling for login and register */
+  .shared-container {
+    width: 100%;
+    max-width: 400px;
+    background: #1c1c1c; /* Dark gray for contrast */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1); /* Soft white shadow */
+    text-align: center;
+    color: #fff; /* White text for better visibility */
+  }
+  
+  .shared-container h2 {
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  .input-group {
+    margin-bottom: 15px;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ccc; /* Light gray for labels */
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #555; /* Subtle border */
+    background-color: #333; /* Darker input background */
+    color: #fff; /* White text */
+  }
+  
+  .input-group input:focus {
+    border-color: #007bff; /* Blue focus border */
+    outline: none;
+  }
+  
+  .error-message {
+    color: #ff4d4f; /* Red for errors */
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Button group styling */
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  button {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #007bff; /* Blue buttons */
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .google-btn {
+    background-color: red;
+  }
+  .google-btn:hover {
+    background-color: rgb(181, 5, 5);
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+  
+  .shared-container p a {
+    color: #1e90ff;
+    text-decoration: none;
+  }
+  
+  .shared-container p a:hover {
+    text-decoration: underline;
+  }
+  

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import RowSkeleton from './rowSkeleton';
+import { doSignOut } from '../firebase/auth';
 
 
 const Dashboard = () => {
@@ -100,6 +101,10 @@ const Dashboard = () => {
     document.body.removeChild(a)
   }
 
+  const signOut = () => {
+    doSignOut()
+  }
+
   return (
 
     
@@ -179,6 +184,8 @@ const Dashboard = () => {
           </div>
           </div>
       </div>
+
+      <Link to={'/login'}><p onClick={signOut()}>Sign out</p></Link>
 
         <div className='dashboard-squares'>
           <div className='square-4'></div>

@@ -28,7 +28,8 @@ function Register() {
     }
 
     return (
-        <div className="register-container">
+        <div className='center-wrapper'>
+        <div className="shared-container">
             {userLoggedIn && <Navigate to="/dashboard" replace={true} />}
             <h2>Register</h2>
             <form onSubmit={onSubmit}>
@@ -75,6 +76,7 @@ function Register() {
             <p>
                 Already have an account? <Link to="/login">Login</Link>
             </p>
+        </div>
         </div>
     )
 }

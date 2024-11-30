@@ -35,46 +35,49 @@ function Login() {
     }
 
     return (
-        <div className="login-container">
-            {userLoggedIn && <Navigate to="/dashboard" replace={true} />}
-            <h2>Login</h2>
-            <form onSubmit={onSubmit}>
+        <div className="center-wrapper">
+            <div className="shared-container">
+                {userLoggedIn && <Navigate to="/dashboard" replace={true} />}
+                <h2>Login</h2>
+                <form onSubmit={onSubmit}>
                 <div className="input-group">
                     <label htmlFor="email">Email</label>
                     <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
-                        required
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
                     />
                 </div>
                 <div className="input-group">
                     <label htmlFor="password">Password</label>
                     <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter your password"
-                        required
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    required
                     />
                 </div>
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <div className="button-group">
                     <button type="submit" disabled={isSigningIn}>
-                        {isSigningIn ? 'Signing In...' : 'Login'}
+                    {isSigningIn ? 'Signing In...' : 'Login'}
                     </button>
                     <button className="google-btn" onClick={onGoogleSignIn} disabled={isSigningIn}>
-                        {isSigningIn ? 'Signing In with Google...' : 'Sign In with Google'}
+                    {isSigningIn ? 'Signing In with Google...' : 'Sign In with Google'}
                     </button>
                 </div>
-            </form>
-            <p>
+                </form>
+                <p>
                 Don't have an account? <Link to="/register">Sign Up</Link>
-            </p>
-        </div>
+                </p>
+            </div>
+            </div>
+
     )
 }
 
