@@ -53,13 +53,15 @@ function LabelSetup() {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key.split('-')[0] === fileName) {
-        if (key.split('-')[1] !== "uploaDate") {
+        if (key.split('-')[1] !== "uploadDate") {
           keysToRemove.push(key)
         }
       }
     }
     
     keysToRemove.forEach(key => localStorage.removeItem(key));
+
+    // set label progress = 0
   }
 
   // const checkChunkSize = async (fileName) => {

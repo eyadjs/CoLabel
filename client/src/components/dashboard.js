@@ -4,6 +4,8 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import RowSkeleton from './rowSkeleton';
 import { doSignOut } from '../firebase/auth';
+import { getStorage, ref, deleteObject } from 'firebase/storage'
+import { storage } from '../firebase/firebase'
 
 
 const Dashboard = () => {
@@ -105,6 +107,35 @@ const Dashboard = () => {
     doSignOut()
   }
 
+  const deleteFile = async (fileName) => {
+    try {
+      const fileNameJSON = fileName.slice(0,-4).concat('.json')
+      const results = ref(storage, '/results/'.concat(fileNameJSON))
+      const uploadsCSV = ref(storage, '/uploads/'.concat(fileName))
+      const uploadsJSON = ref(storage, '/uploads/'.concat(fileNameJSON))
+      
+      await Promise.all([
+        deleteObject(results).catch(() => {}),
+        deleteObject(uploadsCSV).catch(() => {}),
+        deleteObject(uploadsJSON).catch(() => {})
+      ])
+
+      const keysToRemove = []
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.split('-')[0] === fileName) {
+          keysToRemove.push(key)
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+      window.location.reload()
+
+    }
+   catch (error) {
+     console.error("error deleting file: ", error)
+   }
+ }
+
   return (
 
     
@@ -130,7 +161,7 @@ const Dashboard = () => {
               {/* STORE NUMBER OF files LOCALLY SO IT CAN BE USED TO RENDER CORRECT NUMBER OF SKELETONS */}
               {filesInfo.map((file) => (
                 <p key={file.filename}>
-                  <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px] hover:cursor-pointer' >🗑️</button> 
+                  <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px] hover:cursor-pointer' onClick={() => deleteFile(file.filename)}>🗑️</button> 
                   <button onClick={() => downloadCSV(file.filename)} className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 hover:cursor-pointer">📥</button> 
                   <Link to={allParamsExist(file.filename) ?  `/labelSetup/${file.filename}` : `filePage/${file.filename}`} className='filename'>{file?.filename  || <Skeleton></Skeleton>}</Link>
                 </p>

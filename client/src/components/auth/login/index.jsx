@@ -67,9 +67,9 @@ function Login() {
                     <button type="submit" disabled={isSigningIn}>
                     {isSigningIn ? 'Signing In...' : 'Login'}
                     </button>
-                    <button className="google-btn" onClick={onGoogleSignIn} disabled={isSigningIn}>
+                    {/* <button className="google-btn" onClick={onGoogleSignIn} disabled={isSigningIn}>
                     {isSigningIn ? 'Signing In with Google...' : 'Sign In with Google'}
-                    </button>
+                    </button> */}
                 </div>
                 </form>
                 <p>

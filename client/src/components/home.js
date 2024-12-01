@@ -35,7 +35,7 @@ const Home = () => {
           <div className='description'>
             <p>Expedite the <span className='highlight'>boring</span>, <span className='highlight'>agonizing</span> part of developing AI models</p>
           </div>
-          <div className=''>
+          <div >
             <Link to={"/register"}><Button variant='outlined' size="large" sx={{ color: "#c6b3f5", borderColor: "#c6b3f5" }}>Get Started</Button></Link>
           </div>
         </div>
