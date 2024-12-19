@@ -3,18 +3,18 @@ const fs = require('fs')
 const { bucket } = require('./upload');
 
 
-async function extractJSON(fileName) {
-    const file = bucket.file(`uploads/${fileName}`);
+async function extractJSON(fileName, userEmail) {
+    const file = bucket.file(`${userEmail}/uploads/${fileName}`);
     const [fileContent] = await file.download()
-    console.log("hi")
+    // console.log("hi")
     const jsonData = JSON.parse(fileContent.toString('utf8'))
 
     return jsonData
 }
 
-async function getUnlabelledEntries(fileName, chunkSize, labelFieldName) { // fileName MUST BE JSON, make a check for this and other functions
+async function getUnlabelledEntries(fileName, chunkSize, labelFieldName, userEmail) { // fileName MUST BE JSON, make a check for this and other functions
     // const fileName = fileNameRaw.concat(".json")
-    const records = await extractJSON(fileName)
+    const records = await extractJSON(fileName, userEmail)
     let unlabelledEntries = []
     let numEntriesCollected = 0
     for (let i = 0; i < records.length; i++) {

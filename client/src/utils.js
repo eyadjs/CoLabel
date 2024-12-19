@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { getRawFileName } from './App'
-
+import { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
 
 export const getLabels = (fileName) => {
     let labels = []
@@ -19,7 +20,23 @@ export const getLabelFieldName = (fileName) => {
     return localStorage.getItem(fileName.concat("-LabelFieldName"))
 }
 
-export const numUnlabelledEntries = async (fileName) => {
-    const response = await axios.get('http://127.0.0.1:5000/getNumUnlabelledEntries/' + getRawFileName(fileName))
+
+export const useUserEmail = () => {
+    const [userEmail, setUserEmail] = useState(null)
+  
+    useEffect(() => {
+      const auth = getAuth()
+      const user = auth.currentUser
+      if (user) {
+        setUserEmail(user.email)
+      }
+    }, [])
+  
+    return userEmail
+  }
+  
+  export const numUnlabelledEntries = async (fileName, userEmail) => {
+    
+    const response = await axios.get(`http://127.0.0.1:5000/getNumUnlabelledEntries/${userEmail}/${getRawFileName(fileName)}`)
     return response.data.length
   }

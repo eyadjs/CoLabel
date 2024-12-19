@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useParams, Link } from 'react-router-dom'
 import { getRawFileName } from '../App'
-import { getLabels, getLabelFieldName } from '../utils'
+import { getLabels, getLabelFieldName, useUserEmail } from '../utils'
 
 function Labelling() {
   const params = useParams()
   const fileName = params.fileName
-
+  const userEmail = useUserEmail()
   const [entries, setEntries] = useState([])
+  console.log(userEmail)
   
 
   useEffect(() => {
     const fetchEntries = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/sendEntriesForLabelling/' + getRawFileName(fileName).concat(".json"));
+        const response = await axios.get(`http://127.0.0.1:5000/sendEntriesForLabelling/${userEmail}/${getRawFileName(fileName).concat(".json")}`);
         setEntries(response.data)
       } catch (error) {
         console.error(error)
@@ -22,7 +23,7 @@ function Labelling() {
     };
 
     fetchEntries();
-  }, []);
+  }, [userEmail]);
 
   const [entryIndex, setEntryIndex] = useState(0)
 
@@ -47,8 +48,8 @@ function Labelling() {
         const lastModified = new Date()
         const lastModifiedDate = lastModified.toISOString().split('T')[0];
         localStorage.setItem(fileName.concat("-lastModified"), lastModifiedDate)
-
-        await axios.post('http://127.0.0.1:5000/updateRecords/' + getRawFileName(fileName), { entries });
+        console.log("using email: " + userEmail)
+        await axios.post(`http://127.0.0.1:5000/updateRecords/${userEmail}/${getRawFileName(fileName)}`, { entries });
 
       
         alert('Labelled entries sent to backend');
@@ -108,11 +109,11 @@ function Labelling() {
     {/* <pre>{JSON.stringify(entries, null, 2)}</pre> */}
 
     <Link to={'/labelSetup/'.concat(fileName)}>
-      <button className='submit' onClick={finishLabelling}>Label some more</button>
+      <button className='submit' onClick={finishLabelling}>Continue Labelling</button>
     </Link>
 
     <Link to={'/dashboard'}>
-      <button className='submit' onClick={finishLabelling}>Back to Dashboard</button>
+      <button className='submit' onClick={finishLabelling}>Exit</button>
     </Link>
     </div>
 

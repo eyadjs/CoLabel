@@ -11,7 +11,7 @@ const axios = require('axios')
 const admin = require('firebase-admin')
 const fs = require('fs')
 const path = require('path')
-
+const { v4: uuidv4 } = require('uuid')
 const os = require('os');
 
 const { bucket } = require('./upload');
@@ -19,6 +19,7 @@ const { bucket } = require('./upload');
 
 
 app.use(bodyParser.json())
+app.use(express.json())
 app.use(cors())
 
 
@@ -35,8 +36,11 @@ app.use(cors())
 // })
 
 // FIREBASE VERSION - works only for single file uploads.
-app.post('/upload', upload.single('file'), uploadFileToFirebase, (req, res) => {
-  console.log("we loggin")
+app.post('/upload', upload.single('file'), (req, res) => {
+
+  const userEmail = req.body.userEmail
+  uploadFileToFirebase(userEmail, req, res)
+
   res.status(200).send('File uploaded successfully to Firebase.');
 });
 
@@ -53,9 +57,10 @@ app.get('/clear-uploads', async (req, res) => {
   }
 });
 
-app.get('/files', async(req, res) => {
+app.post('/files', async(req, res) => {
   try {
-    const files = await fileNames()
+    const userEmail = req.body.userEmail
+    const files = await fileNames(userEmail)
     res.json(files)
     
   } 
@@ -73,11 +78,11 @@ app.get('/:fileName', (req, res) => { // write the js code to be run from this r
 
 
 labelFieldNames = {};
-const tempFilePath = path.join(os.tmpdir(), 'labelFieldNames.json');
 
-const loadLabelFieldNames = async () => {
+const loadLabelFieldNames = async (userEmail) => {
+  const tempFilePath = path.join(os.tmpdir(), `${userEmail}_labelFieldNames.json`) // (?)
   try {
-    const file = bucket.file('labelFieldNames.json')
+    const file = bucket.file(`${userEmail}/labelFieldNames.json`)
 
     await file.download({destination: tempFilePath })
     return JSON.parse(fs.readFileSync(tempFilePath, 'utf-8'))
@@ -88,23 +93,25 @@ const loadLabelFieldNames = async () => {
     
   }
 }
-const saveLabelFieldNames = async (LFNs) => {
+const saveLabelFieldNames = async (LFNs, userEmail) => {
+  const tempFilePath = path.join(os.tmpdir(), `${userEmail}_labelFieldNames.json`) // (?)
   try {
     fs.writeFileSync(tempFilePath, JSON.stringify(LFNs, null, 2))
-    await bucket.upload(tempFilePath, {destination: 'labelFieldNames.json'})
+    await bucket.upload(tempFilePath, {destination: `${userEmail}/labelFieldNames.json`})
   } catch (err) {
     console.error("error saving label field names to firebase")
   }
 }
 
 
-app.post('/getLabelFieldName/:fileName', async (req, res) => { // MAKE THIS FILE SPECIFIC, CURRENTLY IT JUST RETURNS WHATEVER's label field name
+app.post('/getLabelFieldName/:userEmail/:fileName', async (req, res) => { // MAKE THIS FILE SPECIFIC, CURRENTLY IT JUST RETURNS WHATEVER's label field name
   const { fileName } = req.params
+  const userEmail = req.params.userEmail
   const { data } = req.body
   console.log("setting lfn " + data)
   
-  labelFieldNames[fileName] = data
-  await saveLabelFieldNames(labelFieldNames)
+  labelFieldNames[`${userEmail}/${fileName}`] = data
+  await saveLabelFieldNames(labelFieldNames, userEmail)
 
   res.send({})
   // console.log("LFN is "+labelFieldName)
@@ -116,12 +123,12 @@ app.post('/getChunkSize/:fileName', (req, res) => {
   res.json("getChunkSize")
 })
 
-app.post('/addEmptyLabels/:fileName', async (req, res) => { // AKA CONFIRM SELECTIONS, START LABELLING
+app.post('/addEmptyLabels/:userEmail/:fileName', async (req, res) => { // AKA CONFIRM SELECTIONS, START LABELLING
   try {
 
-    const records = await getRecords(req.params.fileName)
-    await addEmptyLabels(records, labelFieldNames[req.params.fileName])
-    await recordsToTempJSON(records, req.params.fileName)
+    const records = await getRecords(req.params.fileName, req.params.userEmail)
+    await addEmptyLabels(records, labelFieldNames[`${req.params.userEmail}/${req.params.fileName}`])
+    await recordsToTempJSON(records, req.params.fileName, req.params.userEmail)
     res.send(records) // Stored in JSON with same filename
     /*
     Records look like:
@@ -143,46 +150,49 @@ app.post('/addEmptyLabels/:fileName', async (req, res) => { // AKA CONFIRM SELEC
   }
 })
 
-app.get('/sendEntriesForLabelling/:fileName', async (req, res) => {
+app.get('/sendEntriesForLabelling/:userEmail/:fileName', async (req, res) => {
   try {
     const fileNameJSON = req.params.fileName
+    const userEmail = req.params.userEmail
     const fileNameCSV = fileNameJSON.slice(0,-5).concat(".csv")
-    const unlabelledEntry = await getUnlabelledEntries(fileNameJSON, chunkSize, labelFieldNames[fileNameCSV])
+    const unlabelledEntry = await getUnlabelledEntries(fileNameJSON, chunkSize, labelFieldNames[`${userEmail}/${fileNameCSV}`], userEmail)
     res.send(unlabelledEntry)
-  } catch {
+  } catch (error) {
     res.status(500).send(error)
     console.error(error)
   }
 })
 
-app.post('/updateRecords/:rawFileName',  async (req, res) => {
+app.post('/updateRecords/:userEmail/:rawFileName',  async (req, res) => {
   try {
     const labelledEntries = req.body.entries
+    const userEmail = req.params.userEmail
     const fileName = req.params.rawFileName.concat('.json')
-    let records = await extractJSON(fileName)
+    let records = await extractJSON(fileName, userEmail)
 
     for (let i = 0; i < labelledEntries.length; i++) {
       records[labelledEntries[i][0]] = labelledEntries[i][1]
     }
 
-    await writeJSON(fileName, records)
+    await writeJSON(fileName, records, userEmail)
 
   } catch {
     console.error(error)
   }
 })
 
-app.get('/getNumUnlabelledEntries/:rawFileName', async (req, res) => {
+app.get('/getNumUnlabelledEntries/:userEmail/:rawFileName', async (req, res) => {
   try {
     const fileName = req.params.rawFileName.concat('.json')
     const fileNameCSV = req.params.rawFileName.concat('.csv')
-    let records = await extractJSON(fileName)
+    const userEmail = req.params.userEmail
+    let records = await extractJSON(fileName, userEmail)
     
     let numUnlabelledEntries = 0
-    labelFieldNames = await loadLabelFieldNames()
-    console.log("from backend, lfn: "+ labelFieldNames[fileNameCSV])
+    labelFieldNames = await loadLabelFieldNames(userEmail)
+    // console.log("from backend, lfn: "+ labelFieldNames[fileNameCSV])
     for (let i = 0; i < records.length; i++) {
-      if (records[i][labelFieldNames[fileNameCSV]] === "") {
+      if (records[i][labelFieldNames[`${userEmail}/${fileNameCSV}`]] === "") {
         numUnlabelledEntries++
       }
     }
@@ -207,10 +217,11 @@ app.get('/test/:rawFileName', async (req, res) => {
   }
 })
 
-app.get('/getNumEntries/:rawFileName', async (req, res) => {
+app.get('/getNumEntries/:userEmail/:rawFileName', async (req, res) => {
   try {
     const fileName = req.params.rawFileName.concat('.json')
-    const records = await extractJSON(fileName)
+    const userEmail = req.params.userEmail
+    const records = await extractJSON(fileName, userEmail)
 
     res.json({ length: records.length })
 
@@ -220,13 +231,14 @@ app.get('/getNumEntries/:rawFileName', async (req, res) => {
 })
 
 // file downloads
-app.get('/download/:rawFileName', async (req, res) => {
+app.get('/download/:userEmail/:rawFileName', async (req, res) => {
 
   const rawFileName = req.params.rawFileName;
+  const userEmail = req.params.userEmail
   
-  await tempJSONtoCSV(rawFileName.concat('.json')) //  TESTING THIS HERE, IF BUGGY MOVE TO ANOTHER ROUTE
+  await tempJSONtoCSV(rawFileName.concat('.json'), userEmail) //  TESTING THIS HERE, IF BUGGY MOVE TO ANOTHER ROUTE
 
-  const filePath = bucket.file(`results/${rawFileName}.csv`);
+  const filePath = bucket.file(`${userEmail}/results/${rawFileName}.csv`);
 
   // Attempt to read the file from Firebase
   filePath.createReadStream()
@@ -245,14 +257,15 @@ app.get('/download/:rawFileName', async (req, res) => {
 });
 
 
-app.get('/headers/:rawFileName', async (req, res) => {
+app.get('/headers/:userEmail/:rawFileName', async (req, res) => {
 
   try {
   const rawFileName = req.params.rawFileName
+  const userEmail = req.params.userEmail
   const fileName = rawFileName.concat('.csv')
 
   // getting file from firebase instead
-  const file = bucket.file(`uploads/${fileName}`)
+  const file = bucket.file(`${userEmail}/uploads/${fileName}`)
   const [fileData] = await file.download()
   const csvData = await csv().fromString(fileData.toString());
 

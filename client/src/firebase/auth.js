@@ -10,13 +10,13 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
     return signInWithEmailAndPassword(auth, email, password)
 }
 
-export const doSignInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider()
-    const result = await signInWithPopup(auth, provider)
-    // save this to firestore later 
-    // result.user
-    return result
-}
+// export const doSignInWithGoogle = async () => {
+//     const provider = new GoogleAuthProvider()
+//     const result = await signInWithPopup(auth, provider)
+//     // save this to firestore later 
+//     // result.user
+//     return result
+// }
 
 export const doSignOut = () => {
     return auth.signOut()

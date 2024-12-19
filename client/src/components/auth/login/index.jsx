@@ -16,7 +16,7 @@ function Login() {
         e.preventDefault()
         if (!isSigningIn) {
             setIsSigningIn(true)
-            doSignInWithEmailAndPassword(email, password)
+            await doSignInWithEmailAndPassword(email, password)
                 .catch((err) => {
                     setIsSigningIn(false)
                     setErrorMessage('Invalid credentials. Please try again.')
@@ -24,15 +24,15 @@ function Login() {
         }
     }
 
-    const onGoogleSignIn = (e) => {
-        e.preventDefault()
-        if (!isSigningIn) {
-            setIsSigningIn(true)
-            doSignInWithGoogle().catch((err) => {
-                setIsSigningIn(false)
-            })
-        }
-    }
+    // const onGoogleSignIn = (e) => {
+    //     e.preventDefault()
+    //     if (!isSigningIn) {
+    //         setIsSigningIn(true)
+    //         doSignInWithGoogle().catch((err) => {
+    //             setIsSigningIn(false)
+    //         })
+    //     }
+    // }
 
     return (
         <div className="center-wrapper">

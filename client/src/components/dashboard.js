@@ -5,10 +5,16 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import RowSkeleton from './rowSkeleton';
 import { doSignOut } from '../firebase/auth';
 import { getStorage, ref, deleteObject } from 'firebase/storage'
-import { storage } from '../firebase/firebase'
-
+import { doc, setDoc } from "firebase/firestore"
+import { storage, db } from '../firebase/firebase'
+import generateUniqueId from 'generate-unique-id'
+import { useAuth } from '../contexts/authContexts'
+import { onAuthStateChanged, getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { useUserEmail } from '../utils';
 
 const Dashboard = () => {
+
+  const userEmail = useUserEmail()
 
   const fileChangeHandler = (e) => {
     setFileData(e.target.files);
@@ -16,21 +22,34 @@ const Dashboard = () => {
 
 
   const [fileData, setFileData] = useState([]);
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
 
     const data = new FormData();
 
     for (let i = 0; i < fileData.length; i++) {
-      data.append('file', fileData[i]);
+      data.append('file', fileData[i])
+      data.append('userEmail', userEmail)
       const uploadDate = new Date()
       const justDate = uploadDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
       localStorage.setItem(fileData[i].name.concat("-uploadDate"), justDate)
       console.log(fileData[i])
     }
 
-
     
+
+    const fileID = generateUniqueId()
+    // make labelfieldname user specific (just push it into the directory)
+    // fix up any code that doesnt follow the new dir system
+    // 
+    await setDoc(doc(db, "files", fileID), {
+      fileName: fileData[0].name,
+      access: {
+        owner: [userEmail],
+        contributers: []
+      }
+    })
+
 
     // using firebase upload
     fetch('http://127.0.0.1:5000/upload', {
@@ -45,19 +64,25 @@ const Dashboard = () => {
       });
 
       // problematic for debugging
-    window.location.reload()
+    // window.location.reload()
   };
   
   const [isFetchingFiles, setIsFetchingFiles] = useState(true);
   const [filesInfo, setFilesInfo] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:5000/files')
-      .then((res) => res.json())
+    fetch('http://localhost:5000/files', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({ userEmail: userEmail })
+    }).then((res) => res.json())
       .then((data) => {
         setFilesInfo(data)
         setIsFetchingFiles(false)
       })
-  }, [])
+  }, [userEmail])
+
 
   filesInfo.map(file => {
     file.uploadDate = localStorage.getItem(file.filename.concat("-uploadDate")) || "-"
@@ -92,7 +117,7 @@ const Dashboard = () => {
   const downloadCSV = (fileName) => {
     // fix this, still opens new tab sometimes
     const rawFileName = fileName.slice(0,-4)
-    const url = `http://localhost:5000/download/${rawFileName}`
+    const url = `http://localhost:5000/download/${userEmail}/${rawFileName}`
     const a = document.createElement('a');
     a.href = url;
     a.download = fileName;
@@ -110,9 +135,11 @@ const Dashboard = () => {
   const deleteFile = async (fileName) => {
     try {
       const fileNameJSON = fileName.slice(0,-4).concat('.json')
-      const results = ref(storage, '/results/'.concat(fileNameJSON))
-      const uploadsCSV = ref(storage, '/uploads/'.concat(fileName))
-      const uploadsJSON = ref(storage, '/uploads/'.concat(fileNameJSON))
+      const results = ref(storage, `/${userEmail}/results/${fileNameJSON}`)
+      const uploadsCSV = ref(storage, `/${userEmail}/uploads/${fileName}`)
+      const uploadsJSON = ref(storage, `/${userEmail}/uploads/${fileNameJSON}`)
+      
+      
       
       await Promise.all([
         deleteObject(results).catch(() => {}),
@@ -145,7 +172,7 @@ const Dashboard = () => {
         <div className='top'>
           
 
-          <p className='text-xl'>Manage your projects</p>
+          <p className='text-xl'>Welcome back, {userEmail}</p>
         </div>
                 
 
@@ -216,7 +243,7 @@ const Dashboard = () => {
           </div>
       </div>
 
-      <Link to={'/login'}><p onClick={signOut()}>Sign out</p></Link>
+      <Link to={'/login'}><p onClick={signOut}>Sign out</p></Link>
 
         <div className='dashboard-squares'>
           <div className='square-4'></div>

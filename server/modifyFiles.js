@@ -10,15 +10,15 @@ const { uploadFileToFirebase } = require('./upload')
 const { bucket } = require('./upload')
 
 
-async function clear() {
+async function clear() { // scrap (?)
   const dir = './uploads'
   const files = await readdir(dir)
 
   await Promise.all(files.map(f => rm(`${dir}/${f}`)))
 }
 
-async function getRecords(fileName) {
-  const file = bucket.file(`uploads/${fileName}`);
+async function getRecords(fileName, userEmail) {
+  const file = bucket.file(`${userEmail}/uploads/${fileName}`);
   const [fileData] = await file.download();
 
   return new Promise((resolve, reject) => {
@@ -40,8 +40,8 @@ async function addEmptyLabels(records, userChosenLabelName) {
   })
 }
 
-async function fileNames() {
-  const dir = 'uploads/'
+async function fileNames(userEmail) {
+  const dir = `${userEmail}/uploads/`
 
   // each file is a big ol object
   const [files] = await bucket.getFiles( { prefix: dir} )
@@ -61,10 +61,10 @@ async function fileNames() {
       try {
         // can make all this work when json is set up
         fileName = file.name.slice(dir.length) //  remove /uploads from filename
-        const numEntriesResponse = await axios.get('http://127.0.0.1:5000/getNumEntries/'.concat(fileName.slice(0,-4)))
+        const numEntriesResponse = await axios.get(`http://127.0.0.1:5000/getNumEntries/${userEmail}/${fileName.slice(0,-4)}`)
         const numEntries = parseInt(numEntriesResponse.data.length, 10)
 
-        const numUnlabelledEntriesResponse = await axios.get('http://127.0.0.1:5000/getNumUnlabelledEntries/'.concat(fileName.slice(0,-4)))
+        const numUnlabelledEntriesResponse = await axios.get(`http://127.0.0.1:5000/getNumUnlabelledEntries/${userEmail}/${fileName.slice(0,-4)}`)
         const numUnlabelledEntries = parseInt(numUnlabelledEntriesResponse.data.length, 10)
         fileInfo.push({
           filename : fileName,
@@ -86,10 +86,10 @@ async function fileNames() {
   return fileInfo
 }
 
-async function recordsToTempJSON(records, fileName) {
+async function recordsToTempJSON(records, fileName, userEmail) {
   try {
     const jsonString = JSON.stringify(records, null, 4);
-    const file = bucket.file(`uploads/${fileName.slice(0, -3)}json`); 
+    const file = bucket.file(`${userEmail}/uploads/${fileName.slice(0, -3)}json`); 
 
     const stream = file.createWriteStream({
       metadata: {
@@ -111,9 +111,9 @@ async function recordsToTempJSON(records, fileName) {
   }
 }
 
-async function readJSON(fileName) {
+async function readJSON(fileName, userEmail) { // IM NOT USING THIS??
   try {
-    const data = await fs.readFile('./uploads/' + fileName, 'utf8');
+    const data = await fs.readFile(`./uploads/${fileName}`, 'utf8');
     return JSON.parse(data);
   } catch (err) {
     console.error('Error reading JSON file:', err);
@@ -122,7 +122,7 @@ async function readJSON(fileName) {
 }
 
 
-async function writeJSON(fileName, jsonData) {
+async function writeJSON(fileName, jsonData, userEmail) {
   try {
     // Create a mock req.file object to pass to uploadFileToFirebase
     const buffer = Buffer.from(JSON.stringify(jsonData, null, 2)); // Convert JSON to a buffer
@@ -136,7 +136,7 @@ async function writeJSON(fileName, jsonData) {
 
     // Use uploadFileToFirebase to upload the JSON buffer to Firebase Storage
     await new Promise((resolve, reject) => {
-      uploadFileToFirebase(req, null, (err) => {
+      uploadFileToFirebase(userEmail, req, null, (err) => {
         if (err) reject(err);
         resolve();
       });
@@ -148,9 +148,9 @@ async function writeJSON(fileName, jsonData) {
   }
 }
 
-const tempJSONtoCSV = async (fileName) => {
+const tempJSONtoCSV = async (fileName, userEmail) => {
   try {
-    const records = await extractJSON(fileName);
+    const records = await extractJSON(fileName, userEmail);
     let headers = Object.keys(records[0]);
     let fields = [];
     fields.push(headers);
@@ -164,7 +164,7 @@ const tempJSONtoCSV = async (fileName) => {
     });
 
     // Upload CSV to Firebase
-    const blob = bucket.file(`results/${fileName.slice(0, -5)}.csv`);  // Firebase storage path
+    const blob = bucket.file(`${userEmail}/results/${fileName.slice(0, -5)}.csv`);  // Firebase storage path
     const stream = blob.createWriteStream({
       metadata: {
         contentType: 'text/csv',

@@ -1,11 +1,13 @@
 const multer = require('multer');
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json'); // Update with the path to your Firebase service account key
+require('dotenv').config()
 
+const storageBucket = process.env.FIREBASE_URL
 // Initialize Firebase Admin SDK
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'colabel-9dd96.appspot.com', // Replace with your Firebase Storage bucket
+  storageBucket: storageBucket, // Replace with your Firebase Storage bucket
 });
 
 const bucket = admin.storage().bucket();
@@ -16,12 +18,12 @@ const upload = multer({ storage });
 const directoryPath = 'uploads/';
 
 // Middleware to handle file upload
-const uploadFileToFirebase = (req, res, next) => {
+const uploadFileToFirebase = (userEmail, req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
 
-  const blob = bucket.file(`${directoryPath}${req.file.originalname}`); // Create a reference to the file in Firebase
+  const blob = bucket.file(`${userEmail}/${directoryPath}${req.file.originalname}`); // Create a reference to the file in Firebase
   const stream = blob.createWriteStream({
     metadata: {
       contentType: req.file.mimetype,
@@ -36,7 +38,6 @@ const uploadFileToFirebase = (req, res, next) => {
   stream.on('finish', () => {
     // File uploaded successfully, proceed to the next middleware
     console.log('File uploaded successfully to Firebase:', req.file.originalname);
-    next();
   });
 
   stream.end(req.file.buffer); // Upload the file buffer

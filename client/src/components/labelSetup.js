@@ -1,7 +1,7 @@
 import { React, useRef, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { numUnlabelledEntries } from '../utils'
+import { numUnlabelledEntries, useUserEmail } from '../utils'
 import { Button, ButtonGroup } from '@mui/material';
 
 import axios from 'axios'
@@ -10,7 +10,7 @@ import axios from 'axios'
 function LabelSetup() {
 
   
-
+  const userEmail = useUserEmail()
   const chunkSize = useRef()
   const params = useParams()
   const fileName = params.fileName
@@ -44,7 +44,7 @@ function LabelSetup() {
     addLabelChunk()
     sendLCtoServer()
     console.log(getChunkSize())
-    console.log(await numUnlabelledEntries(fileName))
+    console.log(await numUnlabelledEntries(fileName, userEmail))
   }
 
   const resetParameters = async () => {
@@ -75,16 +75,16 @@ function LabelSetup() {
 
   const [chunkValidity, setChunkValidity] = useState(null)
   const [numUnlabelledEntriesState, setNumUnlabelledEntriesState] = useState(null)
+  
 
   useEffect(() => {
     const checkChunkSize = async () => {
       try {
         const chunkSize = chunkSizeState
-        const unlabelledEntries = await numUnlabelledEntries(fileName)
-        console.log("unlabelled entries"+unlabelledEntries)
+        const unlabelledEntries = await numUnlabelledEntries(fileName, userEmail)
         setNumUnlabelledEntriesState(unlabelledEntries)
         if (chunkSize !== null) {
-          setChunkValidity(unlabelledEntries >= chunkSize)
+          setChunkValidity(unlabelledEntries >= chunkSize && chunkSize > 0)
         }
       } catch (error) {
         console.error(error)
@@ -104,7 +104,7 @@ function LabelSetup() {
                 (<h1 style={{fontWeight:"100", fontSize:"30px"}}>All labelled!</h1>) : (
             chunkValidity ?
               (<Link to={`/labelling/${fileName}`}>
-                <Button>labelll</Button>
+                <Button>Label</Button>
               </Link>) : (
               <p>How many entries would you like to label in one go?</p>
               ))
@@ -112,20 +112,21 @@ function LabelSetup() {
             }
         </div>
         
-        <p>Unlabelled entries: {numUnlabelledEntriesState}</p>
-        <p>Chunk size: {chunkSizeState}</p>
-        <p>Chunk validity: {chunkValidity}</p>
+        <p>Unlabelled entries remaining: {numUnlabelledEntriesState}</p>
+    
 
 
 
           <div>
             <input ref={chunkSize}></input>
-            <Button variant="outlined" onClick={confirmLabelChunk} className='submit'>Submit</Button>
           </div>
 
 
           
           <div className='buttons'>
+            <div>
+                  <Button variant="outlined" onClick={confirmLabelChunk} className='submit'>Submit</Button>
+            </div>
             <div>
               <Link to={'/dashboard'}>
                   <Button variant='outlined' color='error' onClick={resetParameters}>Restart</Button> {/* add an are you sure */}
