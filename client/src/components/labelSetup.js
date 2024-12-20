@@ -91,7 +91,7 @@ function LabelSetup() {
       }
     };
     checkChunkSize();
-  }, [chunkSizeState, fileName, numUnlabelledEntriesState]);
+  }, [chunkSizeState, fileName, numUnlabelledEntriesState, userEmail]);
 
   console.log("chunk valid: "+chunkValidity)
   console.log("chink size: " + chunkSizeState)

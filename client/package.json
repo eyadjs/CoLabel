@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.7",
     "@mui/material": "^6.1.7",
+    "@tanstack/react-query": "^5.62.8",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -16,6 +17,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-loading-skeleton": "^3.5.0",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"

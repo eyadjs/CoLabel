@@ -5,7 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import RowSkeleton from './rowSkeleton';
 import { doSignOut } from '../firebase/auth';
 import { getStorage, ref, deleteObject } from 'firebase/storage'
-import { doc, setDoc } from "firebase/firestore"
+import { doc, setDoc, deleteDoc, collection, query, where, getDocs } from "firebase/firestore"
 import { storage, db } from '../firebase/firebase'
 import generateUniqueId from 'generate-unique-id'
 import { useAuth } from '../contexts/authContexts'
@@ -16,10 +16,10 @@ const Dashboard = () => {
 
   const userEmail = useUserEmail()
 
+
   const fileChangeHandler = (e) => {
     setFileData(e.target.files);
   };
-
 
   const [fileData, setFileData] = useState([]);
   const onSubmitHandler = async (e) => {
@@ -39,9 +39,6 @@ const Dashboard = () => {
     
 
     const fileID = generateUniqueId()
-    // make labelfieldname user specific (just push it into the directory)
-    // fix up any code that doesnt follow the new dir system
-    // 
     await setDoc(doc(db, "files", fileID), {
       fileName: fileData[0].name,
       access: {
@@ -64,7 +61,7 @@ const Dashboard = () => {
       });
 
       // problematic for debugging
-    // window.location.reload()
+    window.location.reload()
   };
   
   const [isFetchingFiles, setIsFetchingFiles] = useState(true);
@@ -129,18 +126,28 @@ const Dashboard = () => {
   }
 
   const signOut = () => {
-    doSignOut()
+    doSignOut().then(window.location.pathname = '/login'
+    )
   }
 
   const deleteFile = async (fileName) => {
     try {
       const fileNameJSON = fileName.slice(0,-4).concat('.json')
-      const results = ref(storage, `/${userEmail}/results/${fileNameJSON}`)
+      const results = ref(storage, `/${userEmail}/results/${fileName}`)
       const uploadsCSV = ref(storage, `/${userEmail}/uploads/${fileName}`)
       const uploadsJSON = ref(storage, `/${userEmail}/uploads/${fileNameJSON}`)
       
+      const filesRef = collection(db, "files")
+      const q = query(filesRef, where("fileName", "==", fileName), where("access.owner", "array-contains", userEmail))
       
-      
+      const fileID = await getDocs(q)
+      if (!fileID.empty) {
+        const doc = fileID.docs[0]
+        await deleteDoc(doc.ref)
+      } else {
+        console.log("No file found in db to delete.")
+      }
+
       await Promise.all([
         deleteObject(results).catch(() => {}),
         deleteObject(uploadsCSV).catch(() => {}),
@@ -243,7 +250,7 @@ const Dashboard = () => {
           </div>
       </div>
 
-      <Link to={'/login'}><p onClick={signOut}>Sign out</p></Link>
+        <p onClick={signOut}>Sign out</p>
 
         <div className='dashboard-squares'>
           <div className='square-4'></div>
