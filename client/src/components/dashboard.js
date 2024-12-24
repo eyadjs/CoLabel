@@ -11,6 +11,8 @@ import generateUniqueId from 'generate-unique-id'
 import { useAuth } from '../contexts/authContexts'
 import { onAuthStateChanged, getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { useUserEmail } from '../utils';
+import { useLocation } from 'react-router-dom';
+
 
 const Dashboard = () => {
 
@@ -59,25 +61,39 @@ const Dashboard = () => {
       .catch((err) => {
         console.log(err.message);
       });
-
+    
+    const numFiles = localStorage.getItem("numFiles")
+    if (numFiles === null) {
+      localStorage.setItem("numFiles", 1)
+    } else {
+      localStorage.setItem("numFiles", parseInt(numFiles, 10) + 1)
+    }
       // problematic for debugging
     window.location.reload()
   };
   
   const [isFetchingFiles, setIsFetchingFiles] = useState(true);
   const [filesInfo, setFilesInfo] = useState([]);
+
   useEffect(() => {
-    fetch('http://localhost:5000/files', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({ userEmail: userEmail })
-    }).then((res) => res.json())
-      .then((data) => {
-        setFilesInfo(data)
-        setIsFetchingFiles(false)
+    setIsFetchingFiles(true)
+  
+    const timeout = setTimeout(() => {
+      fetch('http://localhost:5000/files', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ userEmail: userEmail }),
       })
+        .then((res) => res.json())
+        .then((data) => {
+          setFilesInfo(data)
+        })
+        .finally(() => {
+          setIsFetchingFiles(false) 
+        })
+    }, 3000)
+  
+    return () => clearTimeout(timeout)
   }, [userEmail])
 
 
@@ -170,6 +186,15 @@ const Dashboard = () => {
    }
  }
 
+ const [numFilesState, setNumFilesState] = useState(0);
+
+ useEffect(() => {
+   const data = localStorage.getItem('numFiles');
+   setNumFilesState(parseInt(data,10)); 
+ }, []);
+
+ console.log(numFilesState)
+
   return (
 
     
@@ -190,8 +215,7 @@ const Dashboard = () => {
 
             <div className='column'>
               <h2 className="text-[25px] font-light">File</h2>
-              {isFetchingFiles && <RowSkeleton></RowSkeleton>}
-              {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+              {isFetchingFiles && <RowSkeleton rows={numFilesState}/>}
               {/* STORE NUMBER OF files LOCALLY SO IT CAN BE USED TO RENDER CORRECT NUMBER OF SKELETONS */}
               {filesInfo.map((file) => (
                 <p key={file.filename}>
@@ -210,8 +234,7 @@ const Dashboard = () => {
               
             <h2 className="text-[25px] font-light">Label Progress</h2>
 
-              {isFetchingFiles && <RowSkeleton></RowSkeleton>}
-              {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+            {isFetchingFiles && <RowSkeleton rows={numFilesState}/>}
               {filesInfo.map((file) => (
                 <p key={file.filename}>{file?.labelled}%</p>
               ))}
@@ -221,8 +244,7 @@ const Dashboard = () => {
             <div className='column'>
               
             <h2 className="text-[25px] font-light">Last Modified</h2>
-            {isFetchingFiles && <RowSkeleton></RowSkeleton>}
-            {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+            {isFetchingFiles && <RowSkeleton rows={numFilesState}/>}
               {filesInfo.map((file) => (
                 <p key={file.filename}>{file?.lastModified  || <Skeleton></Skeleton>}</p>
               ))}
@@ -230,8 +252,7 @@ const Dashboard = () => {
 
             <div className='column'>
             <h2 className="text-[25px] font-light">Upload date</h2>
-            {isFetchingFiles && <RowSkeleton></RowSkeleton>}
-            {isFetchingFiles && <RowSkeleton></RowSkeleton>}
+            {isFetchingFiles && <RowSkeleton rows={numFilesState}/>}
               {filesInfo.map((file) => (
                 <p key={file.filename}>{file?.uploadDate  || <Skeleton></Skeleton>}</p>
               ))}

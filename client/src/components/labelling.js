@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useParams, Link } from 'react-router-dom'
 import { getRawFileName } from '../App'
 import { getLabels, getLabelFieldName, useUserEmail } from '../utils'
+import generateUniqueId from 'generate-unique-id'
 
 function Labelling() {
   const params = useParams()
@@ -112,7 +113,7 @@ function Labelling() {
       <button className='submit' onClick={finishLabelling}>Continue Labelling</button>
     </Link>
 
-    <Link to={'/dashboard'}>
+    <Link to='/dashboard'>
       <button className='submit' onClick={finishLabelling}>Exit</button>
     </Link>
     </div>
