@@ -91,7 +91,7 @@ const Dashboard = () => {
         .finally(() => {
           setIsFetchingFiles(false) 
         })
-    }, 3000)
+    }, 1500)
   
     return () => clearTimeout(timeout)
   }, [userEmail])
@@ -178,6 +178,8 @@ const Dashboard = () => {
         }
       }
       keysToRemove.forEach(key => localStorage.removeItem(key));
+      const numFiles = parseInt(localStorage.getItem("numFiles"),10)
+      localStorage.setItem("numFiles", numFiles - 1)
       window.location.reload()
 
     }
@@ -204,7 +206,7 @@ const Dashboard = () => {
         <div className='top'>
           
 
-          <p className='text-xl'>Welcome back, {userEmail}</p>
+          <p className='text-xl'>Welcome back, {userEmail}</p> <p onClick={signOut}>Sign out</p>
         </div>
                 
 
@@ -261,24 +263,31 @@ const Dashboard = () => {
 
           </div>
           <div className='file-upload'>
-            <form onSubmit={onSubmitHandler}>
-              <label className='choose-files'>
-                <input type="file" multiple onChange={fileChangeHandler}></input>
+          
+          <div>
+            <form onSubmit={onSubmitHandler} className='file-upload'>
+              <label className="choose-files">
+                <button type="button" className="custom-file-button">Choose File</button>
+                <input type="file" multiple onChange={fileChangeHandler} />
               </label>
-              <button type="submit" className='submit'>Submit</button>
+              {fileData.length !== 0 && <p>File selected: {fileData[0].name}</p>}
+              {fileData.length !== 0 && <button type="submit" className="">Submit</button>}
             </form>
+          </div>
+
+
+
+
           </div>
           </div>
       </div>
 
-        <p onClick={signOut}>Sign out</p>
-
-        <div className='dashboard-squares'>
+        {/* <div className='dashboard-squares'>
           <div className='square-4'></div>
           <div className='square-5'></div>
           <div className='square-6'></div>
           <div className='square-7'></div>
-        </div>
+        </div> */}
 
       </div>
   );

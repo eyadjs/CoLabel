@@ -46,7 +46,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 
 // FIX OR SCRAP OR CHANGE TO CLEAR 1 FILE AT A TIME - USELESS!
-// SHOULD ALSO REMOVE LFN FROM LFN.JSON WHEN FILE IS REMOVED - ADD THIS SOON!
+// SHOULD ALSO REMOVE LFN FROM LFN.JSON WHEN FILE IS REMOVED - ADD THIS SOON! (but do we rly need it? no bugs)
 app.get('/clear-uploads', async (req, res) => {
   try {
       await clear();
@@ -70,14 +70,11 @@ app.post('/files', async(req, res) => {
   }
 })
 
-app.get('/:fileName', (req, res) => { // write the js code to be run from this route <3
+app.get('/:fileName', (req, res) => {
   res.send(`<h1>${req.params.fileName}</h1>`)
 })
 
-
-
-
-labelFieldNames = {};
+labelFieldNames = {}
 
 const loadLabelFieldNames = async (userEmail) => {
   const tempFilePath = path.join(os.tmpdir(), `${userEmail}_labelFieldNames.json`) // (?)
@@ -114,7 +111,6 @@ app.post('/getLabelFieldName/:userEmail/:fileName', async (req, res) => { // MAK
   await saveLabelFieldNames(labelFieldNames, userEmail)
 
   res.send({})
-  // console.log("LFN is "+labelFieldName)
 })
 
 let chunkSize = null
