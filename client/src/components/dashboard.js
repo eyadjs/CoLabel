@@ -201,13 +201,30 @@ const Dashboard = () => {
 
     
       <div className='dashboard-page'>
-
-        {/* <p>{filesInfo[0]?.uploadDate || <Skeleton></Skeleton>}</p> */}
-        <div className='top'>
+          <header>
+            <Link to="/">
+              <a href='#title'>
+                  <img className='logo-black' src="logo-black.png"/>
+              </a>
+            </Link>
+            <nav>
+                
+                <ul className="navlinks">
+                  
+                  <Link to={"/"}>
+                    <li><a>{userEmail}</a></li>
+                  </Link>
+                  <Link to="/login">
+                    <li><a><button onClick={signOut} style={{all: 'unset'}}>Sign out</button></a></li>
+                  </Link>
+                  
+                </ul>
+            </nav>
+            
+          </header>
           
 
-          <p className='text-xl'>Welcome back, {userEmail}</p> <p onClick={signOut}>Sign out</p>
-        </div>
+        
                 
 
 

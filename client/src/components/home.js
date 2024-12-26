@@ -17,7 +17,8 @@ const Home = () => {
                   <li><a href='#about'>About</a></li>
                   <li><a href='#tutorial'>Tutorial</a></li>
                   <li><a href='#updates'>Updates</a></li>
-                  <li><a><button style={{all: 'unset'}}>Get Started</button></a></li>
+                  <li><a><Link to={"/register"}>Get Started</Link></a></li>
+                  
                 </ul>
             </nav>
             
@@ -95,7 +96,7 @@ const Home = () => {
           <div className='file-rows'>
 
             <div className='column'>
-              <h2 className="text-[25px] font-light">File</h2>
+              <h2 className="text-[20px] font-light">File</h2>
                 <p>
                   <button className='bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0 text-[15px]'>🗑️</button> 
                   <button className="bg-transparent border-none p-0 text-black focus:outline-none focus:ring-0">📥</button> 
@@ -116,10 +117,22 @@ const Home = () => {
 
             
             <div className='column'>
-            <h2 className="text-[25px] font-light">Label Progress</h2>
+            <h2 className="text-[20px] font-light">Label Progress</h2>
               <p>21%</p>
               <p>54%</p>
               <p>100%</p>
+            </div>
+            <div className='column'>
+            <h2 className="text-[20px] font-light">Last Modified</h2>
+              <p>2024-12-25</p>
+              <p>2024-12-01</p>
+              <p>2024-12-15</p>
+            </div>
+            <div className='column'>
+            <h2 className="text-[20px] font-light">Upload Date</h2>
+              <p>2024-10-13</p>
+              <p>2024-11-29</p>
+              <p>2024-12-03</p>
             </div>
 
 

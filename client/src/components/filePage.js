@@ -171,8 +171,18 @@ export const FilePage = () => {
 	return (
 		
 		<div>
-			<Link to={'/dashboard'}>Back to dashboard</Link>
-			<h1 style={{textAlign:"center"}}>Currently editing: {fileName}</h1>
+			<header>
+			<nav>
+				<ul className="navlinks">
+					<li><a><h3 style={{textAlign:"center"}}>Currently editing: {fileName}</h3></a></li>
+					<li><a><Link to={'/dashboard'}>Back to dashboard</Link></a></li>
+					
+				</ul>
+			</nav>
+			
+			</header>
+			
+			
 			<div style={{display:"flex", flexDirection:"column", marginLeft:"10%", paddingTop:"5%"}}>
 				
 				<p >What are all the possible labels you'd like to give your data?</p>

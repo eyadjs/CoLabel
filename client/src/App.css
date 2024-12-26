@@ -144,7 +144,7 @@ nav {
 }
 
 .navlinks li {
-    padding: 6px; /* to prevent it from moving other elements when expanding */
+    /* padding: 6px; */
     display: inline-block;
     margin-right: 100px;
     background-color: #111111;
@@ -165,7 +165,7 @@ nav {
 
 .navlinks li a:hover {
     color: rgb(198, 179, 245);
-    font-weight: 500;
+    font-weight: 300;
     cursor: pointer;
 } 
 
@@ -464,13 +464,11 @@ input {
 }
 
 ul {
-    padding-left: 40px;  /* Indent the bullet points */
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding-left: 40px; 
+
   }
   
   li {
-    margin-bottom: 8px; 
     line-height: 1.5;   
     font-size: 18px;
     font-weight: 100;
@@ -623,6 +621,11 @@ ul {
   
   .custom-file-button:hover {
     background-color: #0056b3;
+  }
+
+  .userEmail {
+    font-size: 20px;
+    font-weight: 300;
   }
   
   
