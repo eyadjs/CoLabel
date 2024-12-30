@@ -24,6 +24,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight requests
+
 
 app.use(bodyParser.json())
 app.use(express.json())
