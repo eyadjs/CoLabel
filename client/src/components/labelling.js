@@ -3,7 +3,6 @@ import axios from 'axios'
 import { useParams, Link } from 'react-router-dom'
 import { getRawFileName } from '../App'
 import { getLabels, getLabelFieldName, useUserEmail } from '../utils'
-import generateUniqueId from 'generate-unique-id'
 
 function Labelling() {
   const params = useParams()

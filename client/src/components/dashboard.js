@@ -8,10 +8,7 @@ import { getStorage, ref, deleteObject } from 'firebase/storage'
 import { doc, setDoc, deleteDoc, collection, query, where, getDocs } from "firebase/firestore"
 import { storage, db } from '../firebase/firebase'
 import generateUniqueId from 'generate-unique-id'
-import { useAuth } from '../contexts/authContexts'
-import { onAuthStateChanged, getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { useUserEmail } from '../utils';
-import { useLocation } from 'react-router-dom';
 
 
 const Dashboard = () => {
