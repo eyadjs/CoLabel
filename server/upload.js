@@ -1,6 +1,7 @@
 const multer = require('multer');
 const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccountKey.json'); // Update with the path to your Firebase service account key
+const serviceAccountBase64 = process.env.SERVICE_ACCOUNT_KEY;
+const serviceAccount = JSON.parse(Buffer.from(serviceAccountBase64, 'base64').toString('utf8'));
 require('dotenv').config()
 
 const storageBucket = process.env.FIREBASE_URL
