@@ -17,16 +17,16 @@ const os = require('os');
 const { bucket } = require('./upload');
 
 const corsOptions = {
-  origin: 'https://colabel.vercel.app'
-}
+  origin: '*', // Allow any origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow any method
+  allowedHeaders: '*', // Allow any header
+  credentials: true, // Allow credentials (cookies, HTTP authentication)
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json())
 app.use(express.json())
-app.UseCors(x => x
-  .AllowAnyMethod()
-  .AllowAnyHeader()
-  .SetIsOriginAllowed(origin => true) // allow any origin
-  .AllowCredentials()); // allow credentials
 
 
 
