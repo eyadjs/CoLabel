@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { numUnlabelledEntries, useUserEmail } from '../utils'
 import { Button, ButtonGroup } from '@mui/material';
+import { serverURL } from '../utils';
 
 import axios from 'axios'
 
@@ -30,7 +31,7 @@ function LabelSetup() {
 
 	const sendLCtoServer = async () => {
 		const chunkSize = getChunkSize()
-		const response = await fetch('http://127.0.0.1:5000/getChunkSize/'.concat(fileName), {
+		const response = await fetch(`${serverURL}/getChunkSize/${fileName}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

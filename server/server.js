@@ -152,10 +152,11 @@ app.get('/sendEntriesForLabelling/:userEmail/:fileName', async (req, res) => {
     const userEmail = req.params.userEmail
     const fileNameCSV = fileNameJSON.slice(0,-5).concat(".csv")
     const unlabelledEntry = await getUnlabelledEntries(fileNameJSON, chunkSize, labelFieldNames[`${userEmail}/${fileNameCSV}`], userEmail)
+    console.log("sent success")
     res.send(unlabelledEntry)
   } catch (error) {
     res.status(500).send(error)
-    console.error(error)
+    console.log("sorry")
   }
 })
 

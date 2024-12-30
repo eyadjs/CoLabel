@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useParams, Link } from 'react-router-dom'
 import { getRawFileName } from '../App'
-import { getLabels, getLabelFieldName, useUserEmail } from '../utils'
+import { getLabels, getLabelFieldName, useUserEmail, serverURL } from '../utils'
+
 
 function Labelling() {
   const params = useParams()
@@ -15,7 +16,7 @@ function Labelling() {
   useEffect(() => {
     const fetchEntries = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:5000/sendEntriesForLabelling/${userEmail}/${getRawFileName(fileName).concat(".json")}`);
+        const response = await axios.get(`${serverURL}/sendEntriesForLabelling/${userEmail}/${getRawFileName(fileName).concat(".json")}`);
         setEntries(response.data)
       } catch (error) {
         console.error(error)
@@ -49,7 +50,7 @@ function Labelling() {
         const lastModifiedDate = lastModified.toISOString().split('T')[0];
         localStorage.setItem(fileName.concat("-lastModified"), lastModifiedDate)
         console.log("using email: " + userEmail)
-        await axios.post(`http://127.0.0.1:5000/updateRecords/${userEmail}/${getRawFileName(fileName)}`, { entries });
+        await axios.post(`${serverURL}/updateRecords/${userEmail}/${getRawFileName(fileName)}`, { entries });
 
       
         alert('Labelled entries sent to backend');

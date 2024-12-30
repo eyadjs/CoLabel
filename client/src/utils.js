@@ -3,6 +3,8 @@ import { getRawFileName } from './App'
 import { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
 
+export const serverURL = process.env.REACT_APP_SERVER_URL
+
 export const getLabels = (fileName) => {
     let labels = []
     for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -37,6 +39,7 @@ export const useUserEmail = () => {
   
   export const numUnlabelledEntries = async (fileName, userEmail) => {
     
-    const response = await axios.get(`http://127.0.0.1:5000/getNumUnlabelledEntries/${userEmail}/${getRawFileName(fileName)}`)
+    const response = await axios.get(`${serverURL}/getNumUnlabelledEntries/${userEmail}/${getRawFileName(fileName)}`)
     return response.data.length
   }
+

@@ -6,9 +6,10 @@ const axios = require('axios')
 const { extractJSON } = require('./label')
 const { convertArrayToCSV } = require('convert-array-to-csv')
 const { uploadFileToFirebase } = require('./upload')
-
+require('dotenv').config()
 const { bucket } = require('./upload')
 
+const serverURL = process.env.SERVER_URL
 
 async function clear() { // scrap (?)
   const dir = './uploads'
@@ -61,10 +62,10 @@ async function fileNames(userEmail) {
       try {
         // can make all this work when json is set up
         fileName = file.name.slice(dir.length) //  remove /uploads from filename
-        const numEntriesResponse = await axios.get(`http://127.0.0.1:5000/getNumEntries/${userEmail}/${fileName.slice(0,-4)}`)
+        const numEntriesResponse = await axios.get(`${serverURL}/getNumEntries/${userEmail}/${fileName.slice(0,-4)}`)
         const numEntries = parseInt(numEntriesResponse.data.length, 10)
 
-        const numUnlabelledEntriesResponse = await axios.get(`http://127.0.0.1:5000/getNumUnlabelledEntries/${userEmail}/${fileName.slice(0,-4)}`)
+        const numUnlabelledEntriesResponse = await axios.get(`${serverURL}/getNumUnlabelledEntries/${userEmail}/${fileName.slice(0,-4)}`)
         const numUnlabelledEntries = parseInt(numUnlabelledEntriesResponse.data.length, 10)
         fileInfo.push({
           filename : fileName,

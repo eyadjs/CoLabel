@@ -9,6 +9,7 @@ import { doc, setDoc, deleteDoc, collection, query, where, getDocs } from "fireb
 import { storage, db } from '../firebase/firebase'
 import generateUniqueId from 'generate-unique-id'
 import { useUserEmail } from '../utils';
+import { serverURL } from '../utils';
 
 
 const Dashboard = () => {
@@ -48,7 +49,7 @@ const Dashboard = () => {
 
 
     // using firebase upload
-    fetch('http://127.0.0.1:5000/upload', {
+    fetch(`${serverURL}/upload`, {
       method: 'POST',
       body: data,
     })
@@ -76,7 +77,7 @@ const Dashboard = () => {
     setIsFetchingFiles(true)
   
     const timeout = setTimeout(() => {
-      fetch('http://localhost:5000/files', {
+      fetch(`${serverURL}/files`, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ userEmail: userEmail }),
@@ -127,7 +128,7 @@ const Dashboard = () => {
   const downloadCSV = (fileName) => {
     // fix this, still opens new tab sometimes
     const rawFileName = fileName.slice(0,-4)
-    const url = `http://localhost:5000/download/${userEmail}/${rawFileName}`
+    const url = `${serverURL}/download/${userEmail}/${rawFileName}`
     const a = document.createElement('a');
     a.href = url;
     a.download = fileName;

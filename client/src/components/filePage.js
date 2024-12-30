@@ -6,6 +6,7 @@ import { getLabels } from '../utils'
 import { Button, ButtonGroup } from '@mui/material';
 import { getRawFileName } from '../App';
 import { useUserEmail } from '../utils';
+import { serverURL } from '../utils';
 
 
 
@@ -82,7 +83,7 @@ export const FilePage = () => {
 		if (labelFieldName.current.value.trim().length === 0) {
 			return 0
 		}
-		const response = await fetch(`http://127.0.0.1:5000/getLabelFieldName/${userEmail}/${fileName}`, {
+		const response = await fetch(`${serverURL}/getLabelFieldName/${userEmail}/${fileName}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ export const FilePage = () => {
 
 	const proceedToLabelling = async () => {
 		try {
-			const response = await axios.post(`http://127.0.0.1:5000/addEmptyLabels/${userEmail}/${fileName}`)
+			const response = await axios.post(`${serverURL}/addEmptyLabels/${userEmail}/${fileName}`)
 			localStorage.setItem(fileName.concat("-jsonCreated"), true)
 			console.log(response.data)
 		} catch (error) {
@@ -137,7 +138,7 @@ export const FilePage = () => {
         const fetchHeaders = async () => {
 			if (!userEmail) return 
             try {
-                const response = await axios.get(`http://127.0.0.1:5000/headers/${userEmail}/${fileName.slice(0, -4)}`);
+                const response = await axios.get(`${serverURL}/headers/${userEmail}/${fileName.slice(0, -4)}`);
                 setHeaders(response.data.headers);
             } catch (error) {
                 console.error("Error fetching headers:", error);
