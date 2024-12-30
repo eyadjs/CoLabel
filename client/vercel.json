@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "builds": [
+        { "src": "build", "use": "@vercel/node" }
+    ],
+    "engines": {
+        "node": ">=14.x"
+    },
+    "routes": [
+        { "src": "/(.*)", "dest": "build/$1" }
+    ]
+}
