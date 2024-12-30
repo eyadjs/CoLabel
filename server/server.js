@@ -16,7 +16,9 @@ const os = require('os');
 
 const { bucket } = require('./upload');
 
-
+const corsOptions = {
+  origin: 'https://colabel.vercel.app'
+}
 
 app.use(bodyParser.json())
 app.use(express.json())
