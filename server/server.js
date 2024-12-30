@@ -22,7 +22,11 @@ const corsOptions = {
 
 app.use(bodyParser.json())
 app.use(express.json())
-app.use(cors(corsOptions))
+app.UseCors(x => x
+  .AllowAnyMethod()
+  .AllowAnyHeader()
+  .SetIsOriginAllowed(origin => true) // allow any origin
+  .AllowCredentials()); // allow credentials
 
 
 
