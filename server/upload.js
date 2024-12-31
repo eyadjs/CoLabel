@@ -4,7 +4,6 @@ const admin = require('firebase-admin');
 require('dotenv').config()
 
 
-const storageBucket = process.env.FIREBASE_URL
 // Initialize Firebase Admin SDK
 if (admin.apps.length === 0) {
   admin.initializeApp({
@@ -13,7 +12,7 @@ if (admin.apps.length === 0) {
       private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
       client_email: process.env.FIREBASE_CLIENT_EMAIL,
     }),
-    storageBucket: storageBucket,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   });
 }
 
