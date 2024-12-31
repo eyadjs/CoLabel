@@ -90,7 +90,7 @@ const Dashboard = () => {
         .finally(() => {
           setIsFetchingFiles(false) 
         })
-    }, 1500)
+    }, 3000)
   
     return () => clearTimeout(timeout)
   }, [userEmail])
