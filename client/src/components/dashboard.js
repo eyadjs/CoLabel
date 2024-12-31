@@ -74,26 +74,44 @@ const Dashboard = () => {
   const [isFetchingFiles, setIsFetchingFiles] = useState(true);
   const [filesInfo, setFilesInfo] = useState([]);
 
+  // useEffect(() => {
+  //   setIsFetchingFiles(true)
+  
+  //   const timeout = setTimeout(() => {
+  //     fetch(`${serverURL}/files`, {
+  //       method: 'POST',
+  //       headers: { 'Content-type': 'application/json' },
+  //       body: JSON.stringify({ userEmail: userEmail }),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setFilesInfo(data)
+  //       })
+  //       .finally(() => {
+  //         setIsFetchingFiles(false) 
+  //       })
+  //   }, 1500)
+  
+  //   return () => clearTimeout(timeout)
+  // }, [userEmail])
+
   useEffect(() => {
-    setIsFetchingFiles(true)
+    setIsFetchingFiles(true);
   
-    const timeout = setTimeout(() => {
-      fetch(`${serverURL}/files`, {
-        method: 'POST',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ userEmail: userEmail }),
+    fetch(`${serverURL}/files`, {
+      method: 'POST',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({ userEmail: userEmail }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFilesInfo(data);
       })
-        .then((res) => res.json())
-        .then((data) => {
-          setFilesInfo(data)
-        })
-        .finally(() => {
-          setIsFetchingFiles(false) 
-        })
-    }, 1500)
+      .finally(() => {
+        setIsFetchingFiles(false);
+      });
+  }, [userEmail]);
   
-    return () => clearTimeout(timeout)
-  }, [userEmail])
 
 
   filesInfo.map(file => {
