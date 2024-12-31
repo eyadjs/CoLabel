@@ -1,7 +1,8 @@
 const multer = require('multer');
 const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccountKey.json'); // Update with the path to your Firebase service account key
+// const serviceAccount = require('./serviceAccountKey.json'); // Update with the path to your Firebase service account key
 require('dotenv').config()
+import admin from 'firebase-admin'
 
 const storageBucket = process.env.FIREBASE_URL
 // Initialize Firebase Admin SDK
