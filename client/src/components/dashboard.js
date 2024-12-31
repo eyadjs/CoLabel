@@ -14,9 +14,7 @@ import { serverURL } from '../utils';
 
 const Dashboard = () => {
 
-  if (localStorage.getItem(numFiles) === null) {
-    localStorage.setItem(numFiles, 0)
-  }
+
   const userEmail = useUserEmail()
 
 
@@ -64,7 +62,7 @@ const Dashboard = () => {
       });
     
     const numFiles = localStorage.getItem("numFiles")
-    if (numFiles === 0) {
+    if (numFiles === null) {
       localStorage.setItem("numFiles", 1)
     } else {
       localStorage.setItem("numFiles", parseInt(numFiles, 10) + 1)
