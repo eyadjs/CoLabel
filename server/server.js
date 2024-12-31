@@ -71,7 +71,7 @@ app.post('/files', async(req, res) => {
   } 
   catch (err) {
     console.error(err)
-    res.status(500).send(err);
+    res.status(500).send('An error occurred while clearing the uploads directory.');
   }
 })
 
