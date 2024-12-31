@@ -13,10 +13,8 @@ if (admin.apps.length === 0) {
       private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
       client_email: process.env.FIREBASE_CLIENT_EMAIL,
     }),
-    storageBucket: storageBucket, // Assuming storageBucket is stored in your .env file
-  }, "server_firebase");
-} else {
-  console.log("Firebase admin app already initialized.");
+    storageBucket: storageBucket,
+  });
 }
 
 const bucket = admin.storage().bucket();
