@@ -16,7 +16,7 @@ if (admin.apps.length === 0) {
   });
 }
 
-const bucket = admin.storage().bucket();
+const bucket = admin.storage().bucket()
 
 // Configure Multer to store files in memory
 const storage = multer.memoryStorage();
