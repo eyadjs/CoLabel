@@ -13,7 +13,7 @@ admin.initializeApp({
     client_email: process.env.FIREBASE_CLIENT_EMAIL,
   }),
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET, // Add your storage bucket here
-}, "server_firebase");
+}, );
 
 const bucket = admin.storage().bucket();
 
