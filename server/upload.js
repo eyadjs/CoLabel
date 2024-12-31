@@ -6,14 +6,16 @@ require('dotenv').config()
 
 const storageBucket = process.env.FIREBASE_URL
 // Initialize Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-    client_email: process.env.FIREBASE_CLIENT_EMAIL,
-  }),
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET, // Add your storage bucket here
-}, "server_firebase");
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    }),
+    storageBucket: storageBucket, // Add your storage bucket here
+  }, "server_firebase");
+}
 
 const bucket = admin.storage().bucket();
 
