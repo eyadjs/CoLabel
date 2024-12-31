@@ -6,7 +6,7 @@ require('dotenv').config()
 
 const storageBucket = process.env.FIREBASE_URL
 // Initialize Firebase Admin SDK
-if (!admin.apps.length < 1) {
+if (admin.apps.length < 1) {
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId: process.env.FIREBASE_PROJECT_ID,
