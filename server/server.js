@@ -31,9 +31,6 @@ app.use(bodyParser.json())
 app.use(express.json())
 
 
-
-
-
 // SCRAP THIS
 // app.post('/upload-single', upload.single('file'), (req, res) => {
 //     res.json(req.file)
@@ -78,9 +75,9 @@ app.post('/files', async(req, res) => {
   }
 })
 
-app.get('/:fileName', (req, res) => {
-  res.send(`<h1>${req.params.fileName}</h1>`)
-})
+// app.get('/:fileName', (req, res) => {
+//   res.send(`<h1>${req.params.fileName}</h1>`)
+// })
 
 labelFieldNames = {}
 
