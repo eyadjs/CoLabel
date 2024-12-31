@@ -62,18 +62,16 @@ app.get('/clear-uploads', async (req, res) => {
   }
 });
 
-app.post('/files', async(req, res) => {
+app.post('/files', async (req, res) => {
   try {
-    const userEmail = req.body.userEmail
-    const files = await fileNames(userEmail)
-    res.json(files)
-    
-  } 
-  catch (err) {
-    console.error(err)
-    res.status(500).send('An error occurred while clearing the uploads directory.');
+    const userEmail = req.body.userEmail;
+    const files = await fileNames(userEmail);
+    res.json(files);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred while clearing the uploads directory.' });
   }
-})
+});
 
 // app.get('/:fileName', (req, res) => {
 //   res.send(`<h1>${req.params.fileName}</h1>`)
