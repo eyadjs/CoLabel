@@ -6,15 +6,17 @@ require('dotenv').config()
 
 const storageBucket = process.env.FIREBASE_URL
 // Initialize Firebase Admin SDK
-if (admin.apps.length < 1) {
+if (admin.apps.length === 0) {
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId: process.env.FIREBASE_PROJECT_ID,
       private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
       client_email: process.env.FIREBASE_CLIENT_EMAIL,
     }),
-    storageBucket: storageBucket, // Add your storage bucket here
+    storageBucket: storageBucket, // Assuming storageBucket is stored in your .env file
   }, "server_firebase");
+} else {
+  console.log("Firebase admin app already initialized.");
 }
 
 const bucket = admin.storage().bucket();
