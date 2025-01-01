@@ -2,17 +2,16 @@ const multer = require('multer');
 const admin = require('firebase-admin');
 // const serviceAccount = require('./serviceAccountKey.json'); // Update with the path to your Firebase service account key
 require('dotenv').config()
+const base64 = process.env.base64
+const decodedServiceAccount = Buffer.from(base64, 'base64').toString('utf-8');
+const credentials = JSON.parse(decodedServiceAccount);
 
 
 // Initialize Firebase Admin SDK
 if (admin.apps.length === 0) {
   admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      client_email: process.env.FIREBASE_CLIENT_EMAIL,
-    }),
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    credential: admin.credential.cert(credentials), // Passing the whole credentials object
+    storageBucket: credentials.storage_bucket, // Using storage bucket from the credentials
   });
 }
 
