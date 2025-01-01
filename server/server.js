@@ -71,7 +71,7 @@ app.post('/files', async(req, res) => {
   } 
   catch (err) {
     console.error(err)
-    res.json([])
+    res.send("not working ")
   }
 })
 
